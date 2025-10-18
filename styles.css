@@ -1,0 +1,125 @@
+* {
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: linear-gradient(135deg, #f97316 20%, #2563eb 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #222;
+}
+
+.container {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  width: 90%;
+  max-width: 400px;
+  transition: all 0.4s ease;
+}
+
+header {
+  background: #2563eb;
+  color: #fff;
+  text-align: center;
+  padding: 1.5rem 1rem;
+}
+
+header h1 {
+  font-size: 1.5rem;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1.5rem;
+  gap: 1rem;
+}
+
+.title {
+  text-align: center;
+  color: #2563eb;
+}
+
+input, select {
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+input:focus, select:focus {
+  border-color: #2563eb;
+  outline: none;
+  box-shadow: 0 0 4px #2563eb55;
+}
+
+button {
+  background: #f97316;
+  color: white;
+  padding: 0.9rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #ea580c;
+}
+
+.link {
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.link span {
+  color: #2563eb;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.forgot {
+  text-align: right;
+  font-size: 0.85rem;
+  color: #2563eb;
+}
+
+.error {
+  color: #dc2626;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.success {
+  color: #16a34a;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.terms {
+  font-size: 0.85rem;
+}
+
+@media (max-width: 500px) {
+  header h1 {
+    font-size: 1.25rem;
+  }
+  .container {
+    border-radius: 0;
+    height: 100vh;
+  }
+}
