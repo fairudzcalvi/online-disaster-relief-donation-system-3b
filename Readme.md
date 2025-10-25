@@ -24,9 +24,6 @@ The website has not been named yet.
 - JavaScript
 
 
-## How to run the Website
-1. Clone the repository
-2. Open `index.html` or run `xampp` if it uses PHP
 
 ## Contributors
 - Alih, Salman L. 
