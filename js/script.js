@@ -6,6 +6,12 @@ const successModal = document.getElementById('successModal');
 const modalTitle = document.getElementById('modalTitle');
 const modalMessage = document.getElementById('modalMessage');
 
+const API_BASE_URL = 'http://localhost/online-disaster-relief-donation-system-3b/backend/api';
+
+const API_ENDPOINTS = {
+    LOGIN: API_BASE_URL + '/auth/login.php',
+    REGISTER: API_BASE_URL + '/auth/register.php'
+};
 function showSignup(e) {
     e.preventDefault();
     loginContainer.classList.add('hidden');
@@ -164,43 +170,116 @@ function simulateLoading(button, callback) {
     }, 1500);
 }
 
-loginForm.addEventListener('submit', function(e) {
+loginForm.addEventListener('submit', async function(e) {
     e.preventDefault();
     
     if (validateLoginForm()) {
         const submitButton = loginForm.querySelector('.btn-primary');
         const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value;
         
-        simulateLoading(submitButton, () => {
-            showSuccessModal(
-                'Login Successful!',
-                `Welcome back! You are now logged in as ${email}. Redirecting to your dashboard...`
-            );
-            loginForm.reset();
-        });
+        submitButton.classList.add('loading');
+        submitButton.disabled = true;
+        
+        try {
+            const response = await fetch(API_ENDPOINTS.LOGIN, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            });
+            
+            const result = await response.json();
+            
+            submitButton.classList.remove('loading');
+            submitButton.disabled = false;
+            
+            if (result.success) {
+                localStorage.setItem('user', JSON.stringify(result.data.user));
+                localStorage.setItem('token', result.data.token);
+    
+                showSuccessModal(
+                    'Login Successful!',
+                    `Welcome back, ${result.data.user.full_name}!`
+                );
+                
+                loginForm.reset();
+                
+            
+                
+            } else {
+                alert('Login failed: ' + result.message);
+            }
+            
+        } catch (error) {
+            submitButton.classList.remove('loading');
+            submitButton.disabled = false;
+            alert('Connection error: ' + error.message);
+            console.error('Error:', error);
+        }
     }
 });
 
-signupForm.addEventListener('submit', function(e) {
+
+signupForm.addEventListener('submit', async function(e) {
     e.preventDefault();
     
     if (validateSignupForm()) {
         const submitButton = signupForm.querySelector('.btn-primary');
-        const fullName = document.getElementById('fullName').value.trim();
-        const donorType = document.getElementById('donorType').value;
         
-        simulateLoading(submitButton, () => {
-            showSuccessModal(
-                'Account Created Successfully!',
-                `Welcome, ${fullName}! Your ${donorType} account has been created. You can now start making a difference in disaster relief efforts.`
-            );
-            signupForm.reset();
+        const formData = {
+            full_name: document.getElementById('fullName').value.trim(),
+            email: document.getElementById('signupEmail').value.trim(),
+            username: document.getElementById('signupEmail').value.split('@')[0],
+            password: document.getElementById('signupPassword').value,
+            donor_type: document.getElementById('donorType').value
+        };
+        
+        submitButton.classList.add('loading');
+        submitButton.disabled = true;
+        
+        try {
+            const response = await fetch(API_ENDPOINTS.REGISTER, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
             
-            setTimeout(() => {
-                closeModal();
-                showLogin(new Event('click'));
-            }, 3000);
-        });
+            const result = await response.json();
+            
+            submitButton.classList.remove('loading');
+            submitButton.disabled = false;
+            
+            if (result.success) {
+                showSuccessModal(
+                    'Account Created Successfully!',
+                    `Welcome, ${result.data.full_name}! You can now login with your credentials.`
+                );
+                
+                signupForm.reset();
+                
+    
+                setTimeout(() => {
+                    closeModal();
+                    showLogin(new Event('click'));
+                }, 3000);
+                
+            } else {
+                alert('Registration failed: ' + result.message);
+            }
+            
+        } catch (error) {
+            submitButton.classList.remove('loading');
+            submitButton.disabled = false;
+            alert('Connection error: ' + error.message);
+            console.error('Error:', error);
+        }
     }
 });
 
@@ -241,3 +320,4 @@ successModal.addEventListener('click', function(e) {
         closeModal();
     }
 });
+
