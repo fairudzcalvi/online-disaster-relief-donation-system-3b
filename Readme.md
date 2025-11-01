@@ -36,7 +36,7 @@ The website has not been named yet.
 
 ## Technologies Used 
 ### Frontend
-- HTML5 & CSS3 for structure and styling
+- HTML & CSS for structure and styling
 - JavaScript for all the interactive stuff
 
 ### Backend
@@ -62,7 +62,8 @@ The website has not been named yet.
 
 ## How to run the Website
 ### 1. Clone or download the repository
-- Place the folder 
+- Clone the repository
+- Place the folder into the htdocs folder (C:\xampp\htdocs\online-disaster-relief-donation-system-3b\)
 
 ### 2. Start XAMPP
 - Open XAMPP Control Panel
