@@ -72,7 +72,7 @@ The website has not been named yet.
 ### 3. Create a database
 - Open Phpmyadmin
 - Create database **disaster_donation_db**
-- Import the SQL schema or run the provided queries.
+- Import the SQL schema named disaster_donation_db.sql or run the provided queries.
 
 ### 4. Configuring the database connection
 - Check **backend/config/database.php** for the database connection
