@@ -61,30 +61,8 @@ The website has not been named yet.
 
 
 ## How to run the Website
-### 1. Clone or downlodad the repository
-- Place the folder 
-
-### 2. Start XAMPP
-- Open XAMPP Control Panel
-- Start the Apache and MySQL modules by clicking both the start buttons for Apache and MySQL.
-
-### 3. Create a database
-- Open Phpmyadmin
-- Create database **disaster_donation_db**
-- Import the Sql Schema or run the provided queries.
-
-### 4. Configuring the database connection
-- Check **backend/config/database.php** for the database connection
-- Default Settings
-    - Host: localhost
-    - Database: disaster_donation_db
-    - Username: root
-    - Password: (empty)
-
-
-### 5. Accessing the website
-- For the landing page (hero section), http://localhost/online-disaster-relief-donation-system-3b/landing.html
-- For the login/signup page,  http://localhost/online-disaster-relief-donation-system-3b/index.html
+1. Clone the repository
+2. Open `index.html` or run `xampp` if it uses PHP
 
 ## Contributors
 - Alih, Salman L. 
