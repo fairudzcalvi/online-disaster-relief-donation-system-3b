@@ -62,9 +62,8 @@ Weekly reports include quizzes, seatworks, and other activities
 ## Technologies Used
 
 ### Frontend
-
-* HTML & CSS for structure and styling.
-* JavaScript for interactive features.
+- HTML & CSS for structure and styling
+- JavaScript for all the interactive stuff
 
 ### Backend
 
@@ -92,9 +91,8 @@ Weekly reports include quizzes, seatworks, and other activities
 
 
 ## API Endpoints
-
-* **POST /backend/api/auth/register.php** - User registration
-* **POST /backend/api/auth/login.php** - User authentication
+- **POST /backend/api/auth/register.php** - User registration
+- **POST /backend/api/auth/login.php** - User authentication
 
 
 
