@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Disaster Relief System</title>
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">
+        <i class="fa-solid fa-hand-holding-heart"></i>
+      </div>
+      <h2 class="brand-name">Admin Dashboard</h2>
+    </div>
+
+    <nav class="side-nav">
+      <ul>
+        <li><a href="#" class="nav-link active" data-page="dashboard"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+        <li><a href="#" class="nav-link" data-page="donations"><i class="fa-solid fa-hand-holding-dollar"></i> Donations</a></li>
+        <li><a href="#" class="nav-link" data-page="donors"><i class="fa-solid fa-users"></i> Donors</a></li>
+        <li><a href="#" class="nav-link" data-page="distribution"><i class="fa-solid fa-truck"></i> Distribution</a></li>
+        <li><a href="#" class="nav-link" data-page="inkind"><i class="fa-solid fa-box"></i> In-Kind Donations</a></li>
+        <li><a href="#" class="nav-link" data-page="reports"><i class="fa-solid fa-chart-column"></i> Reports</a></li>
+        <li><a href="#" class="nav-link" data-page="organizations"><i class="fa-solid fa-building"></i> Organizations</a></li>
+        <li><a href="#" class="nav-link" data-page="transparency"><i class="fa-solid fa-shield-halved"></i> Transparency</a></li>
+        <li><a href="#" class="nav-link" data-page="settings"><i class="fa-solid fa-gear"></i> Settings</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main>
+    <header>
+      <div>
+        <h1>Dashboard Overview</h1>
+        <p class="header-subtitle">Monitor and manage disaster relief operations</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-outline" id="exportBtn">
+          <i class="fa-solid fa-download"></i> Export Report
+        </button>
+        <button class="btn btn-primary" id="newCampaignBtn">
+          <i class="fa-solid fa-plus"></i> New Campaign
+        </button>
+        <button class="btn btn-outline" id="logoutBtn">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+      </div>
+    </header>
+
+    
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon green">
+          <i class="fa-solid fa-peso-sign"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Total Monetary Donations</div>
+          <div class="stat-value" id="totalMonetary">₱0</div>
+          <div class="stat-change positive">
+            <i class="fa-solid fa-arrow-up"></i> <span id="monetaryChange">0%</span> from last month
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon blue">
+          <i class="fa-solid fa-box"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">In-Kind Donations</div>
+          <div class="stat-value" id="totalInKind">0 items</div>
+          <div class="stat-change positive">
+            <i class="fa-solid fa-arrow-up"></i> <span id="inKindChange">0%</span> from last month
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon yellow">
+          <i class="fa-solid fa-users"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Active Donors</div>
+          <div class="stat-value" id="totalDonors">0</div>
+          <div class="stat-change positive">
+            <i class="fa-solid fa-arrow-up"></i> <span id="donorsChange">0%</span> from last month
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon red">
+          <i class="fa-solid fa-truck-ramp-box"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Distributions Made</div>
+          <div class="stat-value" id="totalDistributions">0</div>
+          <div class="stat-change positive">
+            <i class="fa-solid fa-arrow-up"></i> <span id="distributionsChange">0</span> this week
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+    <div class="content-grid">
+     
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Recent Donations</h3>
+          <button class="btn btn-outline btn-small" id="viewAllDonationsBtn">View All</button>
+        </div>
+        <div class="table-wrapper">
+          <table id="donationsTable">
+            <thead>
+              <tr>
+                <th>Donor</th>
+                <th>Type</th>
+                <th>Amount/Item</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="donationsTableBody">
+              <tr>
+                <td colspan="6" class="empty-state">No donations yet</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+     
+      <div class="sidebar-content">
+       
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Quick Actions</h3>
+          </div>
+          <div class="card-body">
+            <div class="quick-actions">
+              <button class="action-btn" id="generateReportBtn">
+                <i class="fa-solid fa-file-lines"></i>
+                <span>Generate Transparency Report</span>
+              </button>
+              <button class="action-btn" id="logDistributionBtn">
+                <i class="fa-solid fa-truck"></i>
+                <span>Log Distribution</span>
+              </button>
+              <button class="action-btn" id="sendUpdatesBtn">
+                <i class="fa-solid fa-bell"></i>
+                <span>Send Donor Updates</span>
+              </button>
+              <button class="action-btn" id="addOrganizationBtn">
+                <i class="fa-solid fa-user-plus"></i>
+                <span>Add New Organization</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+       
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Distribution Progress</h3>
+          </div>
+          <div class="card-body" id="distributionProgress">
+            <div class="empty-state">No active distributions</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  
+</body>
+</html>
