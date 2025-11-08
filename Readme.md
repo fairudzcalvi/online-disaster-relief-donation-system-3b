@@ -5,7 +5,7 @@ Weekly reports include quizzes, seatworks, and other activities
 
 ## Description
 
-**BayanihanRelief** is a web-based system that allows users to make donations easily and securely. It features a modern landing page, a user authentication system with login and sign-up functionality, and a complete backend API for secure data management. The system will be continuously updated with new pages, features, and improvements.
+**BayanihanRelief** is a web-based system that allows users to make donations easily and securely. It features a modern landing page, a user authentication system with login and sign-up functionality, and a backend API for secure data management. The system will be continuously updated with new pages, features, and improvements.
 
 
 
@@ -44,18 +44,18 @@ Weekly reports include quizzes, seatworks, and other activities
 - Protected against SQL injection attacks
 - Proper validation on everything you type in
 
-### Admin Dashboard - UI Only
+### Admin Dashboard 
 
-* Monitor donations, donors, distributions, and in-kind items
-* Quick actions for transparency reports, distribution logging, donor updates, and adding organizations
-* Modern, responsive design with smooth animations
-* Statistics display:
+- Monitor donations, donors, distributions, and in-kind items
+- Quick actions for transparency reports, distribution logging, donor updates, and adding organizations
+- Modern, responsive design with smooth animations
+- Statistics display:
 
-  * Total monetary donations
-  * In-kind donations
-  * Active donors
-  * Distributions made
-* Tables for recent donations and distribution progress
+  - Total monetary donations
+  - In-kind donations
+  - Active donors
+  - Distributions made
+- Tables for recent donations and distribution progress
 
 
 
