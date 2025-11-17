@@ -38,7 +38,6 @@ Weekly reports include quizzes, seatworks, and other activities
 - **Responsive Design** - Works on all devices
 - **Modern UI/UX** - Smooth animations and intuitive interface
 - **Modular Architecture** - Scalable and maintainable codebase
-- **Secure Backend** - Protected data management
 
 
 
