@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Donations Management | Admin Dashboard</title>
+  <link rel="stylesheet" href="/assets/css/admin/admin-donations.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">
+        <i class="fa-solid fa-hand-holding-heart"></i>
+      </div>
+      <h2 class="brand-name">Admin Dashboard</h2>
+    </div>
+
+    <nav class="side-nav">
+      <ul>
+        <li><a href="admin.html" class="nav-link"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+        <li><a href="admin-donations.html" class="nav-link active"><i class="fa-solid fa-hand-holding-dollar"></i> Donations</a></li>
+        <li><a href="admin-donors.html" class="nav-link"><i class="fa-solid fa-users"></i> Donors</a></li>
+        <li><a href="admin-distribution.html" class="nav-link"><i class="fa-solid fa-truck"></i> Distribution</a></li>
+        <li><a href="admin-inkind.html" class="nav-link"><i class="fa-solid fa-box"></i> In-Kind Donations</a></li>
+        <li><a href="admin-reports.html" class="nav-link"><i class="fa-solid fa-chart-column"></i> Reports</a></li>
+        <li><a href="admin-organization.html" class="nav-link"><i class="fa-solid fa-building"></i> Organizations</a></li>
+        <li><a href="#" class="nav-link"><i class="fa-solid fa-shield-halved"></i> Transparency</a></li>
+        <li><a href="#" class="nav-link"><i class="fa-solid fa-gear"></i> Settings</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main>
+    <header>
+      <div class="header-top">
+        <div>
+          <h1>Donations Management</h1>
+          <p class="header-subtitle">Review, verify, and manage all donations</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-outline" id="exportBtn">
+            <i class="fa-solid fa-download"></i> Export CSV
+          </button>
+          <button class="btn btn-primary" id="refreshBtn">
+            <i class="fa-solid fa-rotate"></i> Refresh
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters">
+        <div class="filter-group">
+          <i class="fa-solid fa-search"></i>
+          <input type="search" id="searchInput" placeholder="Search by donor name, email, or reference...">
+        </div>
+        
+        <div class="filter-group">
+          <label>Type:</label>
+          <select id="typeFilter">
+            <option value="">All Types</option>
+            <option value="monetary">Monetary</option>
+            <option value="in-kind">In-Kind</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label>Status:</label>
+          <select id="statusFilter">
+            <option value="">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="verified">Verified</option>
+            <option value="received">Received</option>
+            <option value="distributed">Distributed</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label>Date From:</label>
+          <input type="date" id="dateFrom">
+        </div>
+        
+        <div class="filter-group">
+          <label>To:</label>
+          <input type="date" id="dateTo">
+        </div>
+
+        <button class="btn btn-outline btn-small" id="clearFiltersBtn">
+          <i class="fa-solid fa-xmark"></i> Clear
+        </button>
+      </div>
+    </header>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+      <div class="stat-item">
+        <div class="stat-label">Total Donations</div>
+        <div class="stat-value" id="totalCount">0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Total Amount</div>
+        <div class="stat-value" id="totalAmount">₱0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Pending Review</div>
+        <div class="stat-value" id="pendingCount">0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Verified</div>
+        <div class="stat-value" id="verifiedCount">0</div>
+      </div>
+    </div>
+
+    <!-- Donations Table -->
+    <div class="card">
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Donor</th>
+              <th>Type</th>
+              <th>Amount/Item</th>
+              <th>Reference No.</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="donationsTableBody">
+            <!-- Will be populated by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Donation Details Modal -->
+  <div class="modal" id="detailsModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Donation Details</h3>
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- Will be populated by JavaScript -->
+      </div>
+      <div class="modal-footer" id="modalFooter">
+        <!-- Will be populated by JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <script src="/assets/js/admin/admin-donations.js"></script>
+</body>
+</html>

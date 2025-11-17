@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Distribution Management | Admin Dashboard</title>
+  <link rel="stylesheet" href="/assets/css/admin/admin-distribution.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">
+        <i class="fa-solid fa-hand-holding-heart"></i>
+      </div>
+      <h2 class="brand-name">Admin Dashboard</h2>
+    </div>
+
+    <nav class="side-nav">
+      <ul>
+        <li><a href="admin.html" class="nav-link"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+        <li><a href="admin-donations.html" class="nav-link"><i class="fa-solid fa-hand-holding-dollar"></i> Donations</a></li>
+        <li><a href="admin-donors.html" class="nav-link"><i class="fa-solid fa-users"></i> Donors</a></li>
+        <li><a href="admin-distribution.html" class="nav-link active"><i class="fa-solid fa-truck"></i> Distribution</a></li>
+        <li><a href="admin-inkind.html" class="nav-link"><i class="fa-solid fa-box"></i> In-Kind Donations</a></li>
+        <li><a href="admin-reports.html" class="nav-link"><i class="fa-solid fa-chart-column"></i> Reports</a></li>
+        <li><a href="admin-organization.html" class="nav-link"><i class="fa-solid fa-building"></i> Organizations</a></li>
+        <li><a href="#" class="nav-link"><i class="fa-solid fa-shield-halved"></i> Transparency</a></li>
+        <li><a href="#" class="nav-link"><i class="fa-solid fa-gear"></i> Settings</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main>
+    <header>
+      <div class="header-top">
+        <div>
+          <h1>Distribution Management</h1>
+          <p class="header-subtitle">Plan, track, and document relief distributions</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-outline" id="exportBtn">
+            <i class="fa-solid fa-download"></i> Export Report
+          </button>
+          <button class="btn btn-primary" id="newDistributionBtn">
+            <i class="fa-solid fa-plus"></i> New Distribution
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters">
+        <div class="filter-group">
+          <i class="fa-solid fa-search"></i>
+          <input type="search" id="searchInput" placeholder="Search by location, team, or reference...">
+        </div>
+        
+        <div class="filter-group">
+          <label>Status:</label>
+          <select id="statusFilter">
+            <option value="">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="ongoing">Ongoing</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label>Type:</label>
+          <select id="typeFilter">
+            <option value="">All Types</option>
+            <option value="monetary">Monetary</option>
+            <option value="in-kind">In-Kind</option>
+            <option value="mixed">Mixed</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label>Date From:</label>
+          <input type="date" id="dateFrom">
+        </div>
+        
+        <div class="filter-group">
+          <label>To:</label>
+          <input type="date" id="dateTo">
+        </div>
+
+        <button class="btn btn-outline btn-small" id="clearFiltersBtn">
+          <i class="fa-solid fa-xmark"></i> Clear
+        </button>
+      </div>
+    </header>
+
+    <!-- Stats Bar -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon blue">
+          <i class="fa-solid fa-truck"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Total Distributions</div>
+          <div class="stat-value" id="totalDistributions">0</div>
+          <div class="stat-change">
+            <span id="distributionsInfo">All operations</span>
+          </div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon yellow">
+          <i class="fa-solid fa-hourglass-half"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Ongoing Operations</div>
+          <div class="stat-value" id="ongoingCount">0</div>
+          <div class="stat-change">
+            <span id="ongoingInfo">In progress</span>
+          </div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green">
+          <i class="fa-solid fa-check-circle"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Completed</div>
+          <div class="stat-value" id="completedCount">0</div>
+          <div class="stat-change">
+            <span id="completedInfo">Successfully delivered</span>
+          </div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon purple">
+          <i class="fa-solid fa-users"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Beneficiaries Served</div>
+          <div class="stat-value" id="totalBeneficiaries">0</div>
+          <div class="stat-change">
+            <span id="beneficiariesInfo">Total families/individuals</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Grid -->
+    <div class="content-grid">
+      <!-- Main Content -->
+      <div class="main-content">
+        <!-- Distributions Table -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Distribution Operations</h3>
+            <button class="btn btn-outline btn-small" id="refreshBtn">
+              <i class="fa-solid fa-rotate"></i> Refresh
+            </button>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Reference</th>
+                  <th>Location</th>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Beneficiaries</th>
+                  <th>Team Leader</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="distributionsTableBody">
+                <tr>
+                  <td colspan="8" class="empty-state">No distributions yet</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar Content -->
+      <div class="sidebar-content">
+        <!-- Quick Stats -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">This Week</h3>
+          </div>
+          <div class="card-body">
+            <div class="quick-stat-item">
+              <div class="quick-stat-label">New Distributions</div>
+              <div class="quick-stat-value" id="weekDistributions">0</div>
+            </div>
+            <div class="quick-stat-item">
+              <div class="quick-stat-label">Beneficiaries Reached</div>
+              <div class="quick-stat-value" id="weekBeneficiaries">0</div>
+            </div>
+            <div class="quick-stat-item">
+              <div class="quick-stat-label">Items Distributed</div>
+              <div class="quick-stat-value" id="weekItems">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- New/Edit Distribution Modal -->
+  <div class="modal" id="distributionModal">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTitle">New Distribution</h3>
+        <button class="close-btn" onclick="closeDistributionModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="distributionForm">
+          <input type="hidden" id="distributionId">
+          
+          <div class="form-section">
+            <h4 class="form-section-title">Basic Information</h4>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="location">Distribution Location <span class="required">*</span></label>
+                <input type="text" id="location" required placeholder="e.g., Barangay Malubog Evacuation Center">
+              </div>
+
+              <div class="form-group">
+                <label for="distributionDate">Distribution Date <span class="required">*</span></label>
+                <input type="date" id="distributionDate" required>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="distributionType">Distribution Type <span class="required">*</span></label>
+                <select id="distributionType" required>
+                  <option value="">Select type</option>
+                  <option value="monetary">Monetary Aid</option>
+                  <option value="in-kind">In-Kind Donations</option>
+                  <option value="mixed">Mixed (Both)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="beneficiaries">Number of Beneficiaries <span class="required">*</span></label>
+                <input type="number" id="beneficiaries" required min="1" placeholder="Number of families/individuals">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section" id="monetarySection" style="display: none;">
+            <h4 class="form-section-title">Monetary Aid Details</h4>
+            <div class="form-group">
+              <label for="monetaryAmount">Amount per Beneficiary <span class="required">*</span></label>
+              <input type="number" id="monetaryAmount" min="0" step="100" placeholder="₱ 0.00">
+              <small class="form-help">Total amount will be calculated based on number of beneficiaries</small>
+            </div>
+          </div>
+
+          <div class="form-section" id="itemsSection" style="display: none;">
+            <h4 class="form-section-title">Items to Distribute</h4>
+            <div class="items-grid">
+              <div class="item-input-group">
+                <label for="riceQty">
+                  <i class="fa-solid fa-bowl-rice"></i>
+                  Rice (sacks)
+                </label>
+                <input type="number" id="riceQty" min="0" value="0">
+                <small class="stock-info">Available: <span id="riceAvailable">0</span></small>
+              </div>
+              <div class="item-input-group">
+                <label for="waterQty">
+                  <i class="fa-solid fa-bottle-water"></i>
+                  Bottled Water
+                </label>
+                <input type="number" id="waterQty" min="0" value="0">
+                <small class="stock-info">Available: <span id="waterAvailable">0</span></small>
+              </div>
+              <div class="item-input-group">
+                <label for="cannedQty">
+                  <i class="fa-solid fa-can-food"></i>
+                  Canned Goods
+                </label>
+                <input type="number" id="cannedQty" min="0" value="0">
+                <small class="stock-info">Available: <span id="cannedAvailable">0</span></small>
+              </div>
+              <div class="item-input-group">
+                <label for="hygieneQty">
+                  <i class="fa-solid fa-soap"></i>
+                  Hygiene Kits
+                </label>
+                <input type="number" id="hygieneQty" min="0" value="0">
+                <small class="stock-info">Available: <span id="hygieneAvailable">0</span></small>
+              </div>
+              <div class="item-input-group">
+                <label for="blanketsQty">
+                  <i class="fa-solid fa-bed"></i>
+                  Blankets
+                </label>
+                <input type="number" id="blanketsQty" min="0" value="0">
+                <small class="stock-info">Available: <span id="blanketsAvailable">0</span></small>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h4 class="form-section-title">Team Assignment</h4>
+            
+            <div class="form-group">
+              <label for="teamLeader">Team Leader <span class="required">*</span></label>
+              <input type="text" id="teamLeader" required placeholder="Name of team leader">
+            </div>
+
+            <div class="form-group">
+              <label for="teamMembers">Team Members</label>
+              <textarea id="teamMembers" rows="2" placeholder="Enter team member names (comma separated)"></textarea>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h4 class="form-section-title">Additional Information</h4>
+            
+            <div class="form-group">
+              <label for="notes">Notes or Special Instructions</label>
+              <textarea id="notes" rows="3" placeholder="Any special instructions, requirements, or notes about this distribution..."></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeDistributionModal()">Cancel</button>
+        <button class="btn btn-primary" id="saveDistributionBtn">
+          <i class="fa-solid fa-save"></i> Save Distribution
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Distribution Details Modal -->
+  <div class="modal" id="detailsModal">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h3 class="modal-title">Distribution Details</h3>
+        <button class="close-btn" onclick="closeDetailsModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="detailsModalBody">
+        <!-- Will be populated by JavaScript -->
+      </div>
+      <div class="modal-footer" id="detailsModalFooter">
+        <!-- Will be populated by JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <script src="/assets/js/admin/admin-distribution.js"></script>
+</body>
+</html>

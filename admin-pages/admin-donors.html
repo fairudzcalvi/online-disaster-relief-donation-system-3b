@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Donors Management | Admin Dashboard</title>
+  <link rel="stylesheet" href="/assets/css/admin/admin-donors.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">
+        <i class="fa-solid fa-hand-holding-heart"></i>
+      </div>
+      <h2 class="brand-name">Admin Dashboard</h2>
+    </div>
+
+    <nav class="side-nav">
+      <ul>
+        <li><a href="admin.html" class="nav-link"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+        <li><a href="admin-donations.html" class="nav-link"><i class="fa-solid fa-hand-holding-dollar"></i> Donations</a></li>
+        <li><a href="admin-donors.html" class="nav-link active"><i class="fa-solid fa-users"></i> Donors</a></li>
+        <li><a href="admin-distribution.html" class="nav-link"><i class="fa-solid fa-truck"></i> Distribution</a></li>
+        <li><a href="admin-inkind.html" class="nav-link"><i class="fa-solid fa-box"></i> In-Kind Donations</a></li>
+        <li><a href="admin-reports.html" class="nav-link"><i class="fa-solid fa-chart-column"></i> Reports</a></li>
+        <li><a href="admin-organization.html" class="nav-link"><i class="fa-solid fa-building"></i> Organizations</a></li>
+        <li><a href="#" class="nav-link"><i class="fa-solid fa-shield-halved"></i> Transparency</a></li>
+        <li><a href="#" class="nav-link"><i class="fa-solid fa-gear"></i> Settings</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main>
+    <header>
+      <div class="header-top">
+        <div>
+          <h1>Donors Management</h1>
+          <p class="header-subtitle">Manage and track all donors and their contributions</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-outline" id="exportBtn">
+            <i class="fa-solid fa-download"></i> Export List
+          </button>
+          <button class="btn btn-primary" id="addDonorBtn">
+            <i class="fa-solid fa-user-plus"></i> Add Donor
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters">
+        <div class="filter-group">
+          <i class="fa-solid fa-search"></i>
+          <input type="search" id="searchInput" placeholder="Search by name, email, or phone...">
+        </div>
+        
+        <div class="filter-group">
+          <label>Type:</label>
+          <select id="typeFilter">
+            <option value="">All Types</option>
+            <option value="individual">Individual</option>
+            <option value="organization">Organization</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label>Status:</label>
+          <select id="statusFilter">
+            <option value="">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+            <option value="blacklisted">Blacklisted</option>
+          </select>
+        </div>
+
+        <button class="btn btn-outline btn-small" id="clearFiltersBtn">
+          <i class="fa-solid fa-xmark"></i> Clear
+        </button>
+      </div>
+    </header>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+      <div class="stat-item">
+        <div class="stat-icon">
+          <i class="fa-solid fa-users"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Total Donors</div>
+          <div class="stat-value" id="totalDonors">0</div>
+        </div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Individual Donors</div>
+          <div class="stat-value" id="individualCount">0</div>
+        </div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon">
+          <i class="fa-solid fa-building"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Organizations</div>
+          <div class="stat-value" id="orgCount">0</div>
+        </div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon">
+          <i class="fa-solid fa-star"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Active Donors</div>
+          <div class="stat-value" id="activeCount">0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Donors Table -->
+    <div class="card">
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Donor Name</th>
+              <th>Type</th>
+              <th>Contact</th>
+              <th>Location</th>
+              <th>Total Donated</th>
+              <th>Last Donation</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="donorsTableBody">
+            <tr>
+              <td colspan="8" class="empty-state">No donors yet</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Add/Edit Donor Modal -->
+  <div class="modal" id="donorModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTitle">Add New Donor</h3>
+        <button class="close-btn" onclick="closeDonorModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="donorForm">
+          <input type="hidden" id="donorId">
+          
+          <div class="form-group">
+            <label for="donorType">Donor Type <span class="required">*</span></label>
+            <select id="donorType" required>
+              <option value="individual">Individual</option>
+              <option value="organization">Organization</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="donorName">Full Name / Organization Name <span class="required">*</span></label>
+            <input type="text" id="donorName" required placeholder="Enter name">
+          </div>
+
+          <div class="form-group">
+            <label for="donorEmail">Email <span class="required">*</span></label>
+            <input type="email" id="donorEmail" required placeholder="email@example.com">
+          </div>
+
+          <div class="form-group">
+            <label for="donorPhone">Phone Number <span class="required">*</span></label>
+            <input type="tel" id="donorPhone" required placeholder="+63 XXX XXX XXXX">
+          </div>
+
+          <div class="form-group">
+            <label for="donorAddress">Address</label>
+            <input type="text" id="donorAddress" placeholder="Complete address">
+          </div>
+
+          <div class="form-group">
+            <label for="donorCity">City/Municipality</label>
+            <input type="text" id="donorCity" placeholder="City">
+          </div>
+
+          <div class="form-group">
+            <label for="donorNotes">Admin Notes</label>
+            <textarea id="donorNotes" rows="3" placeholder="Internal notes about this donor..."></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeDonorModal()">Cancel</button>
+        <button class="btn btn-primary" id="saveDonorBtn">
+          <i class="fa-solid fa-save"></i> Save Donor
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Donor Profile Modal -->
+  <div class="modal" id="profileModal">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h3 class="modal-title">Donor Profile</h3>
+        <button class="close-btn" onclick="closeProfileModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="profileModalBody">
+        <!-- Will be populated by JavaScript -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeProfileModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/assets/js/admin/admin-donors.js"></script>
+</body>
+</html>
