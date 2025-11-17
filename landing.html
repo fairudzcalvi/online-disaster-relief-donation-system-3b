@@ -3,30 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Together, we rebuild hope</title>
-    <meta name="description" content="Support communities in crisis with transparent, secure donations. Join thousands of donors making a real difference in disaster relief efforts worldwide.">
+    <title>BayanihanRelief - Together, we rebuild hope</title>
+    <meta name="description" content="Support communities in crisis with transparent, secure donations. Join thousands of donors making a real difference in disaster relief efforts.">
     
-    <link rel="stylesheet" href="/assets/css/landing-style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* Admin link styling */
-        .admin-link {
-            font-size: 0.75rem;
-            opacity: 0.4;
-            color: inherit;
-            margin-left: 20px;
-            text-decoration: none;
-            transition: opacity 0.3s;
-        }
-
-        .admin-link:hover {
-            opacity: 0.8;
-            text-decoration: underline;
-        }
-    </style>
 </head>
 <body>
     <!-- Navigation -->
@@ -42,13 +26,11 @@
             <div class="nav-menu" id="navMenu">
                 <a href="#mission" class="nav-link">Mission</a>
                 <a href="#how-it-works" class="nav-link">How It Works</a>
-                <a href="#impact" class="nav-link">Impact</a>
-                <a href="#transparency" class="nav-link">Transparency</a>
+                <a href="#why-support" class="nav-link">Why Support</a>
             </div>
 
             <div class="nav-actions">
-                <a href="index.html" class="btn btn-ghost">Login</a>
-                <button class="btn btn-primary">Donate Now</button>
+                <button class="btn btn-primary" onclick="scrollToSection('donate')">Donate Now</button>
             </div>
 
             <button class="nav-toggle" id="navToggle">
@@ -62,8 +44,8 @@
         <div class="hero-overlay"></div>
         <div class="hero-content">
             <div class="hero-badge">
-                <i class="fas fa-globe"></i>
-                <span>Making a global impact</span>
+                <i class="fas fa-heart"></i>
+                <span>Making a local impact</span>
             </div>
             
             <h1 class="hero-title">Together, we rebuild hope</h1>
@@ -73,7 +55,7 @@
             </p>
 
             <div class="hero-buttons">
-                <button class="btn btn-large btn-primary">
+                <button class="btn btn-large btn-primary" onclick="scrollToSection('donate')">
                     Start Donating
                     <i class="fas fa-arrow-right"></i>
                 </button>
@@ -89,14 +71,14 @@
                     <div class="stat-value">Verified transactions</div>
                 </div>
                 <div class="stat-card">
-                    <i class="fas fa-users stat-icon"></i>
-                    <div class="stat-label">50K+ Donors</div>
-                    <div class="stat-value">Trusted community</div>
+                    <i class="fas fa-hands-helping stat-icon"></i>
+                    <div class="stat-label">Student-Led</div>
+                    <div class="stat-value">Community initiative</div>
                 </div>
                 <div class="stat-card">
                     <i class="fas fa-heart stat-icon"></i>
-                    <div class="stat-label">₱500k+ Raised</div>
-                    <div class="stat-value">Lives changed</div>
+                    <div class="stat-label">Every Peso Counts</div>
+                    <div class="stat-value">Direct to families</div>
                 </div>
             </div>
         </div>
@@ -124,15 +106,15 @@
                         <i class="fas fa-shield-alt"></i>
                     </div>
                     <h3 class="mission-title">Transparent Operations</h3>
-                    <p class="mission-description">Track every dollar from donation to distribution with real-time updates and verified impact reports</p>
+                    <p class="mission-description">Track every donation from contribution to distribution with updates on how your support makes a difference</p>
                 </div>
 
                 <div class="mission-card">
                     <div class="mission-icon">
-                        <i class="fas fa-chart-line"></i>
+                        <i class="fas fa-users"></i>
                     </div>
-                    <h3 class="mission-title">Measurable Impact</h3>
-                    <p class="mission-description">Data-driven approach to maximize effectiveness, ensuring resources reach those who need them most</p>
+                    <h3 class="mission-title">Community-Driven</h3>
+                    <p class="mission-description">A student-led initiative working together to help Filipino families affected by disasters and crises</p>
                 </div>
             </div>
         </div>
@@ -163,12 +145,12 @@
                 <div class="step step-reverse">
                     <div class="step-number">02</div>
                     <div class="step-content">
-                        <h3 class="step-title">Secure Transaction</h3>
-                        <p class="step-description">Your donation is processed through encrypted, verified payment channels ensuring complete security</p>
+                        <h3 class="step-title">Direct Deployment</h3>
+                        <p class="step-description">Funds are immediately allocated to partner organizations on the ground, ensuring help reaches families quickly</p>
                         <ul class="step-features">
-                            <li><i class="fas fa-check-circle"></i> Bank-level encryption</li>
-                            <li><i class="fas fa-check-circle"></i> Multiple payment options</li>
-                            <li><i class="fas fa-check-circle"></i> Instant confirmation</li>
+                            <li><i class="fas fa-check-circle"></i> Direct to relief efforts</li>
+                            <li><i class="fas fa-check-circle"></i> Verified partners</li>
+                            <li><i class="fas fa-check-circle"></i> Minimal overhead</li>
                         </ul>
                     </div>
                 </div>
@@ -176,25 +158,12 @@
                 <div class="step">
                     <div class="step-number">03</div>
                     <div class="step-content">
-                        <h3 class="step-title">Direct Deployment</h3>
-                        <p class="step-description">Funds are immediately allocated to partner organizations on the ground, bypassing unnecessary intermediaries</p>
-                        <ul class="step-features">
-                            <li><i class="fas fa-check-circle"></i> 100% to relief efforts</li>
-                            <li><i class="fas fa-check-circle"></i> Verified partners</li>
-                            <li><i class="fas fa-check-circle"></i> No administrative fees</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="step step-reverse">
-                    <div class="step-number">04</div>
-                    <div class="step-content">
                         <h3 class="step-title">Track Your Impact</h3>
-                        <p class="step-description">Receive updates showing exactly how your contribution helped, with photos and verified impact metrics</p>
+                        <p class="step-description">Receive updates showing exactly how your contribution helped, with photos and stories from the communities we serve</p>
                         <ul class="step-features">
-                            <li><i class="fas fa-check-circle"></i> Real-time updates</li>
+                            <li><i class="fas fa-check-circle"></i> Regular updates</li>
                             <li><i class="fas fa-check-circle"></i> Photo documentation</li>
-                            <li><i class="fas fa-check-circle"></i> Impact reports</li>
+                            <li><i class="fas fa-check-circle"></i> Impact stories</li>
                         </ul>
                     </div>
                 </div>
@@ -202,88 +171,97 @@
         </div>
     </section>
 
-    <!-- Impact Section -->
-    <section id="impact" class="impact-section">
+    <!-- Why Support Section -->
+    <section id="why-support" class="impact-section">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Our Global Impact</h2>
-                <p class="section-subtitle">Real numbers, real change, real lives transformed by your generosity</p>
+                <h2 class="section-title">Why Support Us?</h2>
+                <p class="section-subtitle">A student-led initiative building a better way to help communities in need</p>
             </div>
 
             <div class="impact-grid">
                 <div class="impact-stat">
-                    <div class="impact-number">1M+</div>
-                    <div class="impact-label">Families Helped</div>
-                    <div class="impact-detail">Across 1 country</div>
+                    <div class="impact-icon"><i class="fas fa-users"></i></div>
+                    <div class="impact-label">Student Initiative</div>
+                    <div class="impact-detail">Built by students, for communities</div>
                 </div>
                 <div class="impact-stat">
-                    <div class="impact-number">₱500k+</div>
-                    <div class="impact-label">Funds Distributed</div>
-                    <div class="impact-detail">For this year</div>
+                    <div class="impact-icon"><i class="fas fa-eye"></i></div>
+                    <div class="impact-label">Full Transparency</div>
+                    <div class="impact-detail">Track every donation</div>
                 </div>
                 <div class="impact-stat">
-                    <div class="impact-number">15+</div>
-                    <div class="impact-label">Active Campaigns</div>
-                    <div class="impact-detail">Right now</div>
-                </div>
-                <div class="impact-stat">
-                    <div class="impact-number">75%</div>
-                    <div class="impact-label">Transparency Score</div>
-                    <div class="impact-detail">Verified by auditors</div>
+                    <div class="impact-icon"><i class="fas fa-hand-holding-heart"></i></div>
+                    <div class="impact-label">Direct Impact</div>
+                    <div class="impact-detail">Help families in need</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Transparency Section -->
-    <section id="transparency" class="transparency-section">
+    <!-- Donation Options Section -->
+    <section id="donate" class="donation-options-section">
         <div class="container">
-            <div class="transparency-grid">
-                <div class="transparency-content">
-                    <h2 class="section-title">Complete Transparency</h2>
-                    <p class="transparency-text">We believe trust is earned through complete openness. Every donation is tracked, every dollar accounted for, and every impact measured.</p>
-                    
-                    <div class="breakdown-list">
-                        <div class="breakdown-item">
-                            <div class="breakdown-header">
-                                <span class="breakdown-label">Directly to relief efforts</span>
-                                <span class="breakdown-percentage">95%</span>
-                            </div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 95%"></div>
-                            </div>
-                        </div>
-                        <div class="breakdown-item">
-                            <div class="breakdown-header">
-                                <span class="breakdown-label">Operations & maintenance</span>
-                                <span class="breakdown-percentage">3%</span>
-                            </div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 3%"></div>
-                            </div>
-                        </div>
-                        <div class="breakdown-item">
-                            <div class="breakdown-header">
-                                <span class="breakdown-label">Platform development</span>
-                                <span class="breakdown-percentage">2%</span>
-                            </div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 2%"></div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="donation-header">
+                <h2 class="section-title">Choose Your Donation</h2>
+                <p class="section-subtitle">Your generosity helps us provide relief and hope to families in need.</p>
+            </div>
 
-                    <button class="btn btn-outline">View Full Financial Report</button>
+            <div class="donation-cards">
+                <div class="donation-card">
+                    <h3 class="donation-amount">PHP 1,000.00</h3>
+                    <p class="donation-description">
+                        Provides 2 days worth of meals for a family of 5.
+                    </p>
+                    <button class="btn btn-primary donation-btn">Donate</button>
                 </div>
 
-                <div class="transparency-highlights">
-                    <h3 class="highlights-title">Third-Party Verified</h3>
-                    <ul class="highlights-list">
-                        <li><i class="fas fa-check-circle"></i> Annual independent audits</li>
-                        <li><i class="fas fa-check-circle"></i> Real-time transaction tracking</li>
-                        <li><i class="fas fa-check-circle"></i> Verified impact metrics</li>
-                        <li><i class="fas fa-check-circle"></i> Public financial statements</li>
-                    </ul>
+                <div class="donation-card">
+                    <h3 class="donation-amount">PHP 2,000.00</h3>
+                    <p class="donation-description">
+                        Provides 2 sets of learning materials for 2 children.
+                    </p>
+                    <button class="btn btn-primary donation-btn">Donate</button>
+                </div>
+
+                <div class="donation-card">
+                    <h3 class="donation-amount">PHP 3,000.00</h3>
+                    <p class="donation-description">
+                        Provides 1 week worth of meals for a family of 5.
+                    </p>
+                    <button class="btn btn-primary donation-btn">Donate</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Methods Section -->
+    <section class="payment-methods-section">
+        <div class="container">
+            <div class="payment-header">
+                <h2 class="section-title">Digital Payment Options</h2>
+                <p class="section-subtitle">Quick and secure ways to support our mission.</p>
+            </div>
+
+            <div class="payment-grid">
+                <!-- GCash -->
+                <div class="payment-card">
+                    <h3 class="payment-title">Donate via GCash</h3>
+                    <p class="payment-text">Scan the QR code using your GCash app</p>
+                    <div class="qr-placeholder">
+                        <i class="fas fa-qrcode"></i>
+                        <p>QR Code Coming Soon</p>
+                    </div>
+                </div>
+
+                <!-- Maya -->
+                <div class="payment-card">
+                    <h3 class="payment-title">Donate via Maya</h3>
+                    <p class="payment-text">Scan the QR code using your Maya app</p>
+                    <div class="qr-placeholder">
+                        <i class="fas fa-qrcode"></i>
+                        <p>QR Code Coming Soon</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -294,11 +272,10 @@
         <div class="cta-overlay"></div>
         <div class="container cta-content">
             <h2 class="cta-title">Every Contribution Counts</h2>
-            <p class="cta-subtitle">Join thousands of donors making a difference. Start your impact journey today.</p>
+            <p class="cta-subtitle">Join us in making a difference. Start your impact journey today.</p>
             
             <div class="cta-buttons">
-                <button class="btn btn-large btn-secondary">Start Donating Now</button>
-                <a href="index.html" class="btn btn-large btn-outline-white">Create Account</a>
+                <button class="btn btn-large btn-secondary" onclick="scrollToSection('donate')">Start Donating Now</button>
             </div>
 
             <div class="cta-trust">
@@ -308,8 +285,8 @@
                 </div>
                 <div class="trust-divider"></div>
                 <div class="trust-item">
-                    <i class="fas fa-check-circle"></i>
-                    <span>Verified Impact</span>
+                    <i class="fas fa-heart"></i>
+                    <span>Direct to Families</span>
                 </div>
             </div>
         </div>
@@ -326,7 +303,7 @@
                         </div>
                         <span class="brand-name">BayanihanRelief</span>
                     </div>
-                    <p class="footer-description">Making disaster relief transparent, secure, and impactful for communities worldwide.</p>
+                    <p class="footer-description">A student-led initiative making disaster relief transparent, secure, and impactful for Filipino communities.</p>
                     <div class="social-links">
                         <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
                         <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
@@ -355,12 +332,11 @@
             </div>
 
             <div class="footer-bottom">
-                <p>© 2025 BayanihanRelief. All rights reserved. Non-profit organization committed to transparent disaster relief.</p>
-                <a href="admin-login.html" class="admin-link">Staff</a>
+                <p>© 2025 BayanihanRelief. All rights reserved. Student-led initiative committed to transparent disaster relief.</p>
             </div>
         </div>
     </footer>
-
-    <script src="js/landing-script.js"></script>
+<script src="assets/js/donate-script.js"></script>
+<script src="assets/js/landing-script.js"></script>
 </body>
 </html>

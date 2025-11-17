@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make a Donation - BayanihanRelief</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/donate-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="brand-icon">
+                    <i class="fas fa-hands-helping"></i>
+                </div>
+                <span class="brand-name">BayanihanRelief</span>
+            </div>
+            
+            <div class="nav-actions">
+                <a href="landing.html" class="btn btn-outline">Back to Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Donation Page Content -->
+    <div class="donate-page">
+        <div class="donate-container">
+            <!-- Progress Steps -->
+            <div class="progress-steps">
+                <div class="step active">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Amount</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" id="step2">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Your Info</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" id="step3">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Payment</div>
+                </div>
+            </div>
+
+            <!-- Step 1: Choose Amount -->
+            <div class="donate-step" id="stepAmount">
+                <div class="step-content">
+                    <h1 class="donate-title">Choose Your Donation Amount</h1>
+                    <p class="donate-subtitle">Every peso makes a difference in the lives of those we serve</p>
+
+                    <div class="amount-options">
+                        <button class="amount-btn" data-amount="1000">
+                            <span class="amount-value">PHP 1,000</span>
+                            <span class="amount-desc">2 days of meals for a family</span>
+                        </button>
+                        <button class="amount-btn" data-amount="2000">
+                            <span class="amount-value">PHP 2,000</span>
+                            <span class="amount-desc">Learning materials for 2 children</span>
+                        </button>
+                        <button class="amount-btn" data-amount="3000">
+                            <span class="amount-value">PHP 3,000</span>
+                            <span class="amount-desc">1 week of meals for a family</span>
+                        </button>
+                        <button class="amount-btn" data-amount="5000">
+                            <span class="amount-value">PHP 5,000</span>
+                            <span class="amount-desc">Emergency relief package</span>
+                        </button>
+                    </div>
+
+                    <div class="custom-amount">
+                        <label for="customAmount">Or enter a custom amount:</label>
+                        <div class="input-group">
+                            <span class="input-prefix">PHP</span>
+                            <input type="number" id="customAmount" placeholder="0.00" min="100">
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary btn-large btn-full" onclick="goToStep(2)">
+                        Continue
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Donor Information -->
+            <div class="donate-step hidden" id="stepInfo">
+                <div class="step-content">
+                    <h1 class="donate-title">Your Information</h1>
+                    <p class="donate-subtitle">Help us send you a thank you and donation receipt</p>
+
+                    <div class="donation-summary">
+                        <div class="summary-label">Your donation:</div>
+                        <div class="summary-amount" id="selectedAmount">PHP 0.00</div>
+                    </div>
+
+                    <form class="donor-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name *</label>
+                                <input type="text" id="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name *</label>
+                                <input type="text" id="lastName" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone Number (Optional)</label>
+                            <input type="tel" id="phone">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Message (Optional)</label>
+                            <textarea id="message" rows="4" placeholder="Share why you're supporting us..."></textarea>
+                        </div>
+
+                        <div class="form-checkbox">
+                            <input type="checkbox" id="anonymous">
+                            <label for="anonymous">Make my donation anonymous</label>
+                        </div>
+
+                        <div class="button-group">
+                            <button type="button" class="btn btn-outline btn-large" onclick="goToStep(1)">
+                                <i class="fas fa-arrow-left"></i>
+                                Back
+                            </button>
+                            <button type="button" class="btn btn-primary btn-large" onclick="goToStep(3)">
+                                Continue to Payment
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Step 3: Payment Method -->
+            <div class="donate-step hidden" id="stepPayment">
+                <div class="step-content">
+                    <h1 class="donate-title">Complete Your Donation</h1>
+                    <p class="donate-subtitle">Choose your preferred payment method</p>
+
+                    <div class="donation-summary large">
+                        <div class="summary-row">
+                            <span>Donation Amount:</span>
+                            <span class="summary-amount" id="finalAmount">PHP 0.00</span>
+                        </div>
+                        <div class="summary-donor" id="donorName"></div>
+                    </div>
+
+                    <div class="payment-methods">
+                        <h2 class="payment-heading">Select Payment Method</h2>
+                        
+                        <div class="payment-options">
+                            <!-- GCash -->
+                            <div class="payment-option">
+                                <input type="radio" id="gcash" name="payment" value="gcash">
+                                <label for="gcash" class="payment-label">
+                                    <div class="payment-icon">
+                                        <i class="fas fa-mobile-alt"></i>
+                                    </div>
+                                    <div class="payment-info">
+                                        <div class="payment-name">GCash</div>
+                                        <div class="payment-desc">Pay using GCash QR Code</div>
+                                    </div>
+                                    <i class="fas fa-chevron-right payment-arrow"></i>
+                                </label>
+                            </div>
+
+                            <!-- Maya -->
+                            <div class="payment-option">
+                                <input type="radio" id="maya" name="payment" value="maya">
+                                <label for="maya" class="payment-label">
+                                    <div class="payment-icon">
+                                        <i class="fas fa-wallet"></i>
+                                    </div>
+                                    <div class="payment-info">
+                                        <div class="payment-name">Maya</div>
+                                        <div class="payment-desc">Pay using Maya QR Code</div>
+                                    </div>
+                                    <i class="fas fa-chevron-right payment-arrow"></i>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- QR Code Display (Shows when payment method is selected) -->
+                        <div class="qr-section hidden" id="qrSection">
+                            <div class="qr-container">
+                                <h3 class="qr-title">Scan to Pay</h3>
+                                <div class="qr-code">
+                                    <i class="fas fa-qrcode"></i>
+                                    <p>QR Code Coming Soon</p>
+                                </div>
+                                <p class="qr-instructions">
+                                    1. Open your <span id="paymentApp">GCash</span> app<br>
+                                    2. Scan this QR code<br>
+                                    3. Enter the amount: <strong id="qrAmount">PHP 0.00</strong><br>
+                                    4. Complete the payment<br>
+                                    5. Take a screenshot of the confirmation
+                                </p>
+                            </div>
+
+                            <div class="receipt-upload">
+                                <h3 class="upload-title">Upload Payment Proof</h3>
+                                <p class="upload-desc">Please upload a screenshot of your payment confirmation</p>
+                                <div class="upload-area" id="uploadArea">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p>Click to upload or drag and drop</p>
+                                    <span class="upload-hint">PNG, JPG up to 5MB</span>
+                                    <input type="file" id="receiptFile" accept="image/*" hidden>
+                                </div>
+                                <div class="uploaded-file hidden" id="uploadedFile">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span id="fileName">receipt.jpg</span>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary btn-large btn-full" onclick="completeDonation()">
+                                Submit Donation
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        </div>
+
+                        <div class="button-group">
+                            <button type="button" class="btn btn-outline btn-large" onclick="goToStep(2)">
+                                <i class="fas fa-arrow-left"></i>
+                                Back
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="trust-badges">
+                        <div class="trust-badge">
+                            <i class="fas fa-lock"></i>
+                            <span>Secure Transaction</span>
+                        </div>
+                        <div class="trust-badge">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>100% Verified</span>
+                        </div>
+                        <div class="trust-badge">
+                            <i class="fas fa-heart"></i>
+                            <span>Direct Impact</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal hidden" id="successModal">
+        <div class="modal-content">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2 class="success-title">Thank You!</h2>
+            <p class="success-message">
+                Your donation has been received. We'll review your payment and send you a confirmation email shortly.
+            </p>
+            <div class="success-details">
+                <p><strong>Donation Amount:</strong> <span id="successAmount">PHP 0.00</span></p>
+                <p><strong>Reference:</strong> <span id="referenceNumber">REF-XXXX</span></p>
+            </div>
+            <a href="landing.html" class="btn btn-primary btn-large">Return to Home</a>
+        </div>
+    </div>
+
+    <script src="assets/js/donate-script.js"></script>
+</body>
+</html>
