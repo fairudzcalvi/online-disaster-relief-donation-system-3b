@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Campaigns - BayanihanRelief</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/campaigns.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <div class="brand-icon">
+                    <i class="fas fa-hands-helping"></i>
+                </div>
+                <span class="brand-name">BayanihanRelief</span>
+            </a>
+            
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="index.html#mission" class="nav-link">Mission</a>
+                <a href="campaign.html" class="nav-link active">Campaigns</a>
+                <a href="organizations.html" class="nav-link">Organizations</a>
+                <a href="index.html#how-it-works" class="nav-link">How It Works</a>
+                <a href="index.html#why-support" class="nav-link">Why Support</a>
+                <a href="about.html" class="nav-link">About</a>
+            </div>
+
+            <div class="nav-actions">
+                <a href="donation-page.html" class="btn btn-primary">Donate Now</a>
+            </div>
+
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="page-hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="page-title">Active Relief Campaigns</h1>
+                <p class="page-subtitle">Support verified organizations and track exactly how your donation helps communities</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Campaigns Section -->
+    <section class="campaigns-section">
+        <div class="container">
+            <div class="campaigns-grid" id="campaignsGrid">
+                <!-- Campaign Card 1 -->
+                <div class="campaign-card" data-campaign-id="1">
+                    <div class="campaign-badge urgent">Urgent</div>
+                    <div class="campaign-image">
+                        <img src="https://via.placeholder.com/400x250/27ae60/ffffff?text=Typhoon+Relief" alt="Campaign">
+                    </div>
+                    <div class="campaign-content">
+                        <div class="organization-info">
+                            <div class="org-logo">RC</div>
+                            <div class="org-details">
+                                <div class="org-name">Red Cross Philippines</div>
+                                <div class="org-verified">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Verified Organization</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="campaign-category">
+                            <i class="fas fa-wind"></i>
+                            <span>Typhoon Relief</span>
+                        </div>
+                        <h3 class="campaign-title">Typhoon Victims Emergency Relief</h3>
+                        <p class="campaign-description">Immediate assistance for families affected by recent typhoon. Providing food, water, and emergency shelter.</p>
+                        
+                        <div class="campaign-progress">
+                            <div class="progress-info">
+                                <span class="progress-text">₱450,000 raised</span>
+                                <span class="progress-goal">of ₱1,000,000</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 45%"></div>
+                            </div>
+                        </div>
+
+                        <div class="campaign-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-users"></i>
+                                <span>856 donors</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-clock"></i>
+                                <span>12 days left</span>
+                            </div>
+                        </div>
+
+                        <div class="campaign-actions">
+                            <button class="btn btn-primary btn-campaign donate-btn">Donate Now</button>
+                            <button class="btn btn-outline btn-campaign view-details-btn">
+                                <i class="fas fa-chart-line"></i> Transparency
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campaign Card 2 -->
+                <div class="campaign-card" data-campaign-id="2">
+                    <div class="campaign-badge active">Active</div>
+                    <div class="campaign-image">
+                        <img src="https://via.placeholder.com/400x250/3498db/ffffff?text=Flood+Relief" alt="Campaign">
+                    </div>
+                    <div class="campaign-content">
+                        <div class="organization-info">
+                            <div class="org-logo">CC</div>
+                            <div class="org-details">
+                                <div class="org-name">Caritas Philippines</div>
+                                <div class="org-verified">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Verified Organization</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="campaign-category">
+                            <i class="fas fa-water"></i>
+                            <span>Flood Relief</span>
+                        </div>
+                        <h3 class="campaign-title">Flood Victims Recovery Support</h3>
+                        <p class="campaign-description">Supporting families rebuild their homes and lives after devastating floods in Northern Luzon.</p>
+                        
+                        <div class="campaign-progress">
+                            <div class="progress-info">
+                                <span class="progress-text">₱280,000 raised</span>
+                                <span class="progress-goal">of ₱500,000</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 56%"></div>
+                            </div>
+                        </div>
+
+                        <div class="campaign-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-users"></i>
+                                <span>543 donors</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-clock"></i>
+                                <span>25 days left</span>
+                            </div>
+                        </div>
+
+                        <div class="campaign-actions">
+                            <button class="btn btn-primary btn-campaign donate-btn">Donate Now</button>
+                            <button class="btn btn-outline btn-campaign view-details-btn">
+                                <i class="fas fa-chart-line"></i> Transparency
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campaign Card 3 -->
+                <div class="campaign-card" data-campaign-id="3">
+                    <div class="campaign-badge active">Active</div>
+                    <div class="campaign-image">
+                        <img src="https://via.placeholder.com/400x250/e74c3c/ffffff?text=Fire+Relief" alt="Campaign">
+                    </div>
+                    <div class="campaign-content">
+                        <div class="organization-info">
+                            <div class="org-logo">OP</div>
+                            <div class="org-details">
+                                <div class="org-name">Operation Blessing</div>
+                                <div class="org-verified">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Verified Organization</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="campaign-category">
+                            <i class="fas fa-fire"></i>
+                            <span>Fire Relief</span>
+                        </div>
+                        <h3 class="campaign-title">Fire Incident Family Support</h3>
+                        <p class="campaign-description">Help families who lost their homes in recent residential fire. Providing temporary shelter and essentials.</p>
+                        
+                        <div class="campaign-progress">
+                            <div class="progress-info">
+                                <span class="progress-text">₱180,000 raised</span>
+                                <span class="progress-goal">of ₱300,000</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 60%"></div>
+                            </div>
+                        </div>
+
+                        <div class="campaign-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-users"></i>
+                                <span>412 donors</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-clock"></i>
+                                <span>18 days left</span>
+                            </div>
+                        </div>
+
+                        <div class="campaign-actions">
+                            <button class="btn btn-primary btn-campaign donate-btn">Donate Now</button>
+                            <button class="btn btn-outline btn-campaign view-details-btn">
+                                <i class="fas fa-chart-line"></i> Transparency
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Campaign Details Modal -->
+    <div class="modal" id="campaignModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Campaign Details</h2>
+                <button class="modal-close" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Dynamic content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/campaigns.js"></script>
+    <script src="assets/js/shared/admin-shortcut.js"></script>
+    <script>
+        // Navbar scroll + mobile toggle
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+        });
+        const navToggle = document.getElementById('navToggle');
+        const navMenu = document.getElementById('navMenu');
+        if (navToggle && navMenu) {
+            navToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
+            document.addEventListener('click', e => {
+                if (!navMenu.contains(e.target) && !navToggle.contains(e.target)) {
+                    navMenu.classList.remove('active');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
