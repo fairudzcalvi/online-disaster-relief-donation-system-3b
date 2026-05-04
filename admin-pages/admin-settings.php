@@ -17,6 +17,7 @@
       <ul>
         <li><a href="admin.php" class="nav-link"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
         <li><a href="admin-donations.php" class="nav-link"><i class="fa-solid fa-hand-holding-dollar"></i> Donations</a></li>
+        <li><a href="admin-campaigns.php" class="nav-link"><i class="fa-solid fa-bullhorn"></i> Campaigns</a></li>
         <li><a href="admin-distribution.php" class="nav-link"><i class="fa-solid fa-truck"></i> Distribution</a></li>
         <li><a href="admin-inkind.php" class="nav-link"><i class="fa-solid fa-box"></i> In-Kind Donations</a></li>
         <li><a href="admin-reports.php" class="nav-link"><i class="fa-solid fa-chart-column"></i> Reports</a></li>

@@ -7,17 +7,15 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$data = json_decode(file_get_contents("php://input"), true);
-
-$firstName     = trim($data['firstName'] ?? '');
-$lastName      = trim($data['lastName'] ?? '');
-$email         = trim($data['email'] ?? '');
-$phone         = trim($data['phone'] ?? '');
-$message       = trim($data['message'] ?? '');
-$anonymous     = !empty($data['anonymous']) ? 1 : 0;
-$amount        = $data['amount'] ?? 0;
-$paymentMethod = trim($data['paymentMethod'] ?? '');
-$receiptPath   = trim($data['receiptPath'] ?? '');
+// Accept FormData (multipart) — JS now sends FormData with optional file
+$firstName     = trim($_POST['firstName'] ?? '');
+$lastName      = trim($_POST['lastName'] ?? '');
+$email         = trim($_POST['email'] ?? '');
+$phone         = trim($_POST['phone'] ?? '');
+$message       = trim($_POST['message'] ?? '');
+$anonymous     = !empty($_POST['anonymous']) && $_POST['anonymous'] !== 'false' ? 1 : 0;
+$amount        = $_POST['amount'] ?? 0;
+$paymentMethod = trim($_POST['paymentMethod'] ?? '');
 
 if ($firstName === '' || $lastName === '' || $email === '' || $amount <= 0 || $paymentMethod === '') {
     http_response_code(400);
@@ -37,6 +35,21 @@ if ($amount < 100) {
     exit;
 }
 
+// Handle receipt file upload
+$receiptPath = '';
+if (!empty($_FILES['receipt']['tmp_name'])) {
+    $uploadDir = '../../uploads/receipts/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true);
+    }
+    $ext = pathinfo($_FILES['receipt']['name'], PATHINFO_EXTENSION);
+    $safeExt = in_array(strtolower($ext), ['jpg','jpeg','png','gif','webp']) ? strtolower($ext) : 'jpg';
+    $filename = 'receipt_' . uniqid() . '.' . $safeExt;
+    if (move_uploaded_file($_FILES['receipt']['tmp_name'], $uploadDir . $filename)) {
+        $receiptPath = 'uploads/receipts/' . $filename;
+    }
+}
+
 $conn = getDBConnection();
 $reference = 'DON-' . strtoupper(substr(md5(uniqid()), 0, 8));
 
@@ -53,8 +66,8 @@ try {
     ]);
 
     echo json_encode([
-        "status" => "success",
-        "message" => "Donation submitted successfully",
+        "status"    => "success",
+        "message"   => "Donation submitted successfully",
         "reference" => $reference
     ]);
 } catch (PDOException $e) {

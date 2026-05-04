@@ -267,11 +267,11 @@ function renderDistributionProgress() {
 
 function setupQuickActions() {
   document.getElementById("generateReportBtn").addEventListener("click", () => {
-    window.location.href = "admin-reports.html";
+    window.location.href = "admin-reports.php";
   });
 
   document.getElementById("logDistributionBtn").addEventListener("click", () => {
-    window.location.href = "admin-distribution.html";
+    window.location.href = "admin-distribution.php";
   });
 
   document.getElementById("sendUpdatesBtn").addEventListener("click", () => {
@@ -279,7 +279,7 @@ function setupQuickActions() {
   });
 
   document.getElementById("addOrganizationBtn").addEventListener("click", () => {
-    window.location.href = "admin-organization.html";
+    window.location.href = "admin-organization.php";
   });
 }
 
@@ -298,17 +298,16 @@ function setupHeaderActions() {
 
   document.getElementById("logoutBtn").addEventListener("click", () => {
     if (confirm("Are you sure you want to logout?")) {
-      // Clear any session data
-      sessionStorage.clear();
-      localStorage.clear();
-      
-      // Redirect to login
-      window.location.href = "admin_logIn.html";
+      fetch('../api/auth/logout.php', { method: 'POST' }).finally(() => {
+        sessionStorage.clear();
+        localStorage.clear();
+        window.location.href = "admin_logIn.html";
+      });
     }
   });
 
   document.getElementById("viewAllDonationsBtn").addEventListener("click", () => {
-    window.location.href = "admin-donations.html";
+    window.location.href = "admin-donations.php";
   });
 }
 

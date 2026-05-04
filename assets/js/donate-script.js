@@ -139,18 +139,21 @@ async function processPayment() {
     // Handled by completeDonation()
 }
 
-// Complete donation — submit to backend with optional receipt
+// Complete donation — submit to backend with receipt file
 async function completeDonation() {
     const submitBtn = document.querySelector('[onclick="completeDonation()"]');
     if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Submitting...'; }
 
     try {
-        const payload = { ...donorInfo };
+        const formData = new FormData();
+        Object.entries(donorInfo).forEach(([key, val]) => formData.append(key, val));
+        if (uploadedReceiptFile) {
+            formData.append('receipt', uploadedReceiptFile);
+        }
 
         const response = await fetch('api/auth/save_donation.php', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: formData
         });
 
         const result = await response.json();
@@ -208,6 +211,9 @@ if (uploadArea) {
     });
 }
 
+// Track uploaded receipt file
+let uploadedReceiptFile = null;
+
 function handleFileUpload(file) {
     if (!file.type.startsWith('image/')) {
         alert('Please upload an image file');
@@ -219,6 +225,7 @@ function handleFileUpload(file) {
         return;
     }
     
+    uploadedReceiptFile = file;
     fileName.textContent = file.name;
     uploadedFile.classList.remove('hidden');
     uploadArea.style.display = 'none';

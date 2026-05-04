@@ -21,12 +21,13 @@
 
     <nav class="side-nav">
       <ul>
-        <li><a href="admin.php" class="nav-link"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+        <li><a href="admin.php" class="nav-link active"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
         <li><a href="admin-donations.php" class="nav-link"><i class="fa-solid fa-hand-holding-dollar"></i> Donations</a></li>
+        <li><a href="admin-campaigns.php" class="nav-link"><i class="fa-solid fa-bullhorn"></i> Campaigns</a></li>
         <li><a href="admin-distribution.php" class="nav-link"><i class="fa-solid fa-truck"></i> Distribution</a></li>
         <li><a href="admin-inkind.php" class="nav-link"><i class="fa-solid fa-box"></i> In-Kind Donations</a></li>
         <li><a href="admin-reports.php" class="nav-link"><i class="fa-solid fa-chart-column"></i> Reports</a></li>
-        <li><a href="admin-organization.php" class="nav-link active"><i class="fa-solid fa-building"></i> Organizations</a></li>
+        <li><a href="admin-organization.php" class="nav-link"><i class="fa-solid fa-building"></i> Organizations</a></li>
         <li><a href="admin-settings.php" class="nav-link"><i class="fa-solid fa-gear"></i> Settings</a></li>
     </ul>
     </nav>

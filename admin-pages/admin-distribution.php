@@ -34,6 +34,7 @@ $sql = "SELECT COUNT(Distribution_ID) AS total FROM distributions";
       <ul>
         <li><a href="admin.php" class="nav-link"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
         <li><a href="admin-donations.php" class="nav-link"><i class="fa-solid fa-hand-holding-dollar"></i> Donations</a></li>
+        <li><a href="admin-campaigns.php" class="nav-link"><i class="fa-solid fa-bullhorn"></i> Campaigns</a></li>
         <li><a href="admin-distribution.php" class="nav-link active"><i class="fa-solid fa-truck"></i> Distribution</a></li>
         <li><a href="admin-inkind.php" class="nav-link"><i class="fa-solid fa-box"></i> In-Kind Donations</a></li>
         <li><a href="admin-reports.php" class="nav-link"><i class="fa-solid fa-chart-column"></i> Reports</a></li>
@@ -304,7 +305,7 @@ $sql = "SELECT COUNT(Distribution_ID) AS total FROM distributions";
                   <i class="fa-solid fa-soap"></i>
                   Hygiene Kits
                 </label>
-                <input type="number" id="hygieneQty" min="0" value="0">
+                <input type="number" id="hygieneQty" name="hygieneQty" min="0" value="0">
                 <small class="stock-info">Available: <span id="hygieneAvailable" name="hygieneAvailable">0</span></small>
               </div>
               <div class="item-input-group">
@@ -312,7 +313,7 @@ $sql = "SELECT COUNT(Distribution_ID) AS total FROM distributions";
                   <i class="fa-solid fa-bed"></i>
                   Blankets
                 </label>
-                <input type="number" id="blanketsQty" min="0" value="0">
+                <input type="number" id="blanketsQty" name="blanketsQty" min="0" value="0">
                 <small class="stock-info">Available: <span id="blanketsAvailable" name="blanketsAvailable">0</span></small>
               </div>
             </div>

@@ -14,9 +14,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $distributionId   = $_POST['distributionId'] ?? null;
 $location         = trim($_POST['location'] ?? '');
 $distributionDate = trim($_POST['distributionDate'] ?? '');
-$distributionType = trim($_POST['distributionType'] ?? '');
+$distributionType = trim($_POST['distributionType'] ?? 'mixed');
 $beneficiaries    = trim($_POST['beneficiaries'] ?? '');
 $teamLeader       = trim($_POST['teamLeader'] ?? '');
+$teamMembers      = trim($_POST['teamMembers'] ?? '');
 $notes            = trim($_POST['notes'] ?? '');
 $monetaryAmount   = trim($_POST['monetaryAmount'] ?? '0');
 
@@ -42,23 +43,27 @@ if (($distributionType === 'monetary' || $distributionType === 'mixed') &&
 try {
     if ($distributionId) {
         $sql = "UPDATE distributions SET
-                    Location = ?, TIME_DATE = ?, Beneficiaries = ?,
-                    Team_Leader = ?, Money_minimum_limit = ?
+                    Location = ?, TIME_DATE = ?, Distribution_Type = ?,
+                    Beneficiaries = ?, Team_Leader = ?, Team_Members = ?,
+                    Money_minimum_limit = ?, Notes = ?
                 WHERE Distribution_ID = ?";
         $conn->prepare($sql)->execute([
-            $location, $distributionDate, (int)$beneficiaries,
-            $teamLeader, $moneyLimit, $distributionId
+            $location, $distributionDate, $distributionType,
+            (int)$beneficiaries, $teamLeader, $teamMembers,
+            $moneyLimit, $notes, $distributionId
         ]);
         echo json_encode(["status" => "success", "message" => "Distribution updated successfully"]);
     } else {
         $reference = "REF-" . strtoupper(substr(md5(uniqid()), 0, 8));
         $sql = "INSERT INTO distributions
-                    (Refferences, Location, TIME_DATE, Beneficiaries,
-                     Team_Leader, Status, Money_minimum_limit)
-                VALUES (?, ?, ?, ?, ?, 'pending', ?)";
+                    (Refferences, Location, TIME_DATE, Distribution_Type,
+                     Beneficiaries, Team_Leader, Team_Members,
+                     Status, Money_minimum_limit, Notes)
+                VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?)";
         $conn->prepare($sql)->execute([
-            $reference, $location, $distributionDate,
-            (int)$beneficiaries, $teamLeader, $moneyLimit
+            $reference, $location, $distributionDate, $distributionType,
+            (int)$beneficiaries, $teamLeader, $teamMembers,
+            $moneyLimit, $notes
         ]);
         echo json_encode(["status" => "success", "message" => "Distribution added successfully"]);
     }

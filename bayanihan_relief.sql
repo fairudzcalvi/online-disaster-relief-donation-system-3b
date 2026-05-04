@@ -67,6 +67,33 @@ ALTER TABLE `admins`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 -- --------------------------------------------------------
+-- Table: campaigns
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `campaigns` (
+  `Campaign_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Campaign_Title` varchar(255) NOT NULL,
+  `Campaign_Organization` varchar(255) NOT NULL,
+  `Campaign_Category` varchar(100) NOT NULL,
+  `Campaign_Description` text NOT NULL,
+  `Campaign_Goal` decimal(12,2) NOT NULL DEFAULT 0.00,
+  `Campaign_Raised` decimal(12,2) NOT NULL DEFAULT 0.00,
+  `Campaign_Beneficiaries` varchar(100) DEFAULT NULL,
+  `Campaign_Location` varchar(255) DEFAULT NULL,
+  `Campaign_Start_Date` date NOT NULL,
+  `Campaign_End_Date` date DEFAULT NULL,
+  `Campaign_Status` enum('active','urgent','completed','cancelled') DEFAULT 'active',
+  `Campaign_Image` varchar(255) DEFAULT NULL,
+  `Created_At` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`Campaign_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Sample campaign data
+INSERT INTO `campaigns` (`Campaign_Title`, `Campaign_Organization`, `Campaign_Category`, `Campaign_Description`, `Campaign_Goal`, `Campaign_Raised`, `Campaign_Beneficiaries`, `Campaign_Location`, `Campaign_Start_Date`, `Campaign_End_Date`, `Campaign_Status`) VALUES
+('Typhoon Victims Emergency Relief', 'Red Cross Philippines', 'Typhoon Relief', 'Providing immediate assistance to families affected by recent typhoon in Visayas region. Our team is on the ground distributing food packages, clean water, medical supplies, and emergency shelter materials.', 1000000.00, 450000.00, '2,400 families', 'Eastern Visayas', '2025-11-10', '2025-11-22', 'urgent'),
+('Flood Victims Recovery Support', 'Caritas Philippines', 'Flood Relief', 'Supporting families rebuild their homes and lives after devastating floods in Northern Luzon. Providing construction materials, livelihood support, and temporary housing assistance.', 500000.00, 280000.00, '1,800 families', 'Cagayan Valley', '2025-11-05', '2025-11-30', 'active'),
+('Fire Incident Family Support', 'Operation Blessing', 'Fire Relief', 'Emergency support for 85 families who lost their homes in a residential fire. Providing temporary shelter, clothing, food, and essential household items.', 300000.00, 180000.00, '85 families', 'Metro Manila', '2025-11-08', '2025-11-26', 'active');
+
+-- --------------------------------------------------------
 -- Table: organization
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `organization` (
@@ -133,10 +160,13 @@ CREATE TABLE IF NOT EXISTS `distributions` (
   `Refferences` varchar(50) NOT NULL,
   `Location` varchar(255) NOT NULL,
   `TIME_DATE` date NOT NULL,
+  `Distribution_Type` varchar(20) DEFAULT 'mixed',
   `Beneficiaries` int(11) NOT NULL DEFAULT 0,
   `Team_Leader` varchar(100) NOT NULL,
+  `Team_Members` text DEFAULT NULL,
   `Status` enum('pending','ongoing','completed','cancelled') DEFAULT 'pending',
   `Money_minimum_limit` decimal(12,2) DEFAULT 0.00,
+  `Notes` text DEFAULT NULL,
   `Created_At` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`Distribution_ID`),
   UNIQUE KEY `Refferences` (`Refferences`)

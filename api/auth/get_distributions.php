@@ -7,9 +7,11 @@ verifyAdminToken($conn);
 
 try {
     $sql = "SELECT Distribution_ID as id, Refferences as reference, Location as location,
-                   TIME_DATE as date, Beneficiaries as beneficiaries,
-                   Team_Leader as teamLeader, Status as status,
-                   Money_minimum_limit as monetaryLimit
+                   TIME_DATE as date, Distribution_Type as type,
+                   Beneficiaries as beneficiaries, Team_Leader as teamLeader,
+                   Team_Members as teamMembers, Status as status,
+                   Money_minimum_limit as monetaryLimit, Notes as notes,
+                   Created_At as createdDate
             FROM distributions
             ORDER BY TIME_DATE DESC";
     $stmt = $conn->prepare($sql);
