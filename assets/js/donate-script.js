@@ -62,7 +62,7 @@ async function goToStep(stepNumber) {
             return;
         }
         if (!selectedPaymentMethod) {
-            alert('Please select a payment method (GCash or Maya)');
+            alert('Please select a payment method (GCash or GrabPay)');
             return;
         }
         document.getElementById('selectedAmount').textContent = `PHP ${selectedAmount.toLocaleString('en-PH', {minimumFractionDigits: 2})}`;
