@@ -121,7 +121,7 @@ function calculateDashboardStats() {
   // Monetary donations total
   const totalMonetary = donations
     .filter(d => d.type === "monetary" && d.status === "verified")
-    .reduce((sum, d) => sum + d.amount, 0);
+    .reduce((sum, d) => sum + parseFloat(d.amount || 0), 0);
 
   // In-kind donations count
   const totalInKind = donations
@@ -158,11 +158,10 @@ function updateDashboardStats() {
   document.getElementById("totalDistributions").textContent = 
     stats.totalDistributions;
 
-  // Mock percentage changes (in production, calculate from historical data)
-  document.getElementById("monetaryChange").textContent = "12.5%";
-  document.getElementById("inKindChange").textContent = "8.3%";
-  document.getElementById("donorsChange").textContent = "15.2%";
-  document.getElementById("distributionsChange").textContent = "3";
+  document.getElementById("monetaryChange") && (document.getElementById("monetaryChange").textContent = "");
+  document.getElementById("inKindChange") && (document.getElementById("inKindChange").textContent = "");
+  document.getElementById("donorsChange") && (document.getElementById("donorsChange").textContent = "");
+  document.getElementById("distributionsChange") && (document.getElementById("distributionsChange").textContent = "");
 }
 
 // ==========================================
@@ -364,22 +363,63 @@ function viewDonationDetails(id) {
   const donation = donations.find(d => d.id === id);
   if (!donation) return;
 
-  const detailsHTML = `
-    <strong>Reference:</strong> ${donation.referenceNo}<br>
-    <strong>Donor:</strong> ${donation.donor.name}<br>
-    <strong>Email:</strong> ${donation.donor.email}<br>
-    <strong>Type:</strong> ${donation.type}<br>
-    ${donation.type === 'monetary' 
-      ? `<strong>Amount:</strong> ₱${donation.amount.toLocaleString()}`
-      : `<strong>Item:</strong> ${donation.item} (x${donation.quantity})`
-    }<br>
-    <strong>Date:</strong> ${formatDate(donation.date)}<br>
-    <strong>Status:</strong> ${capitalizeFirst(donation.status)}
+  const isMonetary = donation.type === 'monetary';
+  const statusColor = donation.status === 'verified' ? '#27ae60' : donation.status === 'failed' ? '#e74c3c' : '#f39c12';
+
+  document.getElementById('donationDetailBody').innerHTML = `
+    <div style="display:grid;gap:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:13px;color:var(--text-light);">Reference</span>
+        <strong>${donation.referenceNo || donation.Reference_Number || '—'}</strong>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:13px;color:var(--text-light);">Donor</span>
+        <strong>${donation.donor?.name || (donation.Donor_FirstName + ' ' + donation.Donor_LastName) || '—'}</strong>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:13px;color:var(--text-light);">Email</span>
+        <span>${donation.donor?.email || donation.Donor_Email || '—'}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:13px;color:var(--text-light);">Type</span>
+        <span>${isMonetary ? 'Monetary' : 'In-Kind'}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:13px;color:var(--text-light);">${isMonetary ? 'Amount' : 'Item'}</span>
+        <strong>${isMonetary 
+          ? '₱' + Number(donation.amount || donation.Donation_Amount || 0).toLocaleString('en-PH', {minimumFractionDigits: 2})
+          : (donation.item || '—') + (donation.quantity ? ' (x' + donation.quantity + ')' : '')
+        }</strong>
+      </div>
+      ${isMonetary ? `
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:13px;color:var(--text-light);">Payment Method</span>
+        <span>${donation.Payment_Method || donation.paymentMethod || '—'}</span>
+      </div>` : ''}
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:13px;color:var(--text-light);">Date</span>
+        <span>${formatDate(donation.date || donation.Donation_Date)}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:13px;color:var(--text-light);">Status</span>
+        <span style="padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;background:${statusColor}20;color:${statusColor};">
+          ${capitalizeFirst(donation.status || donation.Status)}
+        </span>
+      </div>
+      ${donation.Donor_Message || donation.message ? `
+      <div style="border-top:1px solid var(--border-color);padding-top:14px;">
+        <div style="font-size:13px;color:var(--text-light);margin-bottom:6px;">Message</div>
+        <div style="font-size:14px;font-style:italic;">"${donation.Donor_Message || donation.message}"</div>
+      </div>` : ''}
+    </div>
   `;
 
-  if (confirm(detailsHTML + '\n\nGo to full donations page?')) {
-    window.location.href = 'admin-donations.html';
-  }
+  const modal = document.getElementById('donationDetailModal');
+  modal.style.display = 'flex';
+}
+
+function closeDonationModal() {
+  document.getElementById('donationDetailModal').style.display = 'none';
 }
 
 // ==========================================
@@ -436,6 +476,11 @@ document.addEventListener('DOMContentLoaded', async function() {
   setupQuickActions();
   setupHeaderActions();
   highlightCurrentPage();
+
+  // Close donation modal on backdrop click
+  document.getElementById('donationDetailModal').addEventListener('click', function(e) {
+    if (e.target === this) closeDonationModal();
+  });
 
   const adminName = sessionStorage.getItem('adminName') || 'Admin';
   console.log(`Welcome back, ${adminName}!`);

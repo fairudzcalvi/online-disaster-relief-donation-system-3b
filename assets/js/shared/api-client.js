@@ -1,9 +1,7 @@
 // API Client - Handles all backend communication
 class APIClient {
   constructor() {
-    // Resolve base URL relative to the page location
-    const depth = window.location.pathname.split('/').filter(Boolean).length;
-    this.baseURL = depth > 0 ? '../'.repeat(depth) + 'api/auth/' : 'api/auth/';
+    this.baseURL = '/online_disaster/public_html/api/auth/';
   }
 
   async request(endpoint, method = 'GET', data = null) {

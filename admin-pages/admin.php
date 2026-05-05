@@ -62,9 +62,6 @@
         <div class="stat-content">
           <div class="stat-label">Total Monetary Donations</div>
           <div class="stat-value" id="totalMonetary">₱0</div>
-          <div class="stat-change positive">
-            <i class="fa-solid fa-arrow-up"></i> <span id="monetaryChange">0%</span> from last month
-          </div>
         </div>
       </div>
 
@@ -75,9 +72,6 @@
         <div class="stat-content">
           <div class="stat-label">In-Kind Donations</div>
           <div class="stat-value" id="totalInKind">0 items</div>
-          <div class="stat-change positive">
-            <i class="fa-solid fa-arrow-up"></i> <span id="inKindChange">0%</span> from last month
-          </div>
         </div>
       </div>
 
@@ -88,9 +82,6 @@
         <div class="stat-content">
           <div class="stat-label">Active Donors</div>
           <div class="stat-value" id="totalDonors">0</div>
-          <div class="stat-change positive">
-            <i class="fa-solid fa-arrow-up"></i> <span id="donorsChange">0%</span> from last month
-          </div>
         </div>
       </div>
 
@@ -101,8 +92,8 @@
         <div class="stat-content">
           <div class="stat-label">Distributions Made</div>
           <div class="stat-value" id="totalDistributions">0</div>
-          <div class="stat-change positive">
-            <i class="fa-solid fa-arrow-up"></i> <span id="distributionsChange">0</span> this week
+        </div>
+      </div>
           </div>
         </div>
       </div>
@@ -179,6 +170,21 @@
     </div>
 
   </main>
+
+  <!-- Donation Detail Modal -->
+  <div class="modal" id="donationDetailModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;">
+    <div class="modal-content" style="background:#fff;border-radius:12px;width:100%;max-width:480px;padding:0;overflow:hidden;">
+      <div class="modal-header" style="padding:20px 24px;border-bottom:1px solid var(--border-color);display:flex;justify-content:space-between;align-items:center;">
+        <h3 style="margin:0;font-size:18px;">Donation Details</h3>
+        <button onclick="closeDonationModal()" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--text-light);">&times;</button>
+      </div>
+      <div class="modal-body" style="padding:24px;" id="donationDetailBody"></div>
+      <div class="modal-footer" style="padding:16px 24px;border-top:1px solid var(--border-color);display:flex;justify-content:flex-end;gap:10px;">
+        <button class="btn btn-outline" onclick="closeDonationModal()">Close</button>
+        <button class="btn btn-primary" onclick="window.location.href='admin-donations.php'">View All Donations</button>
+      </div>
+    </div>
+  </div>
 
   <script src="../assets/js/admin/admin.js"></script>
 </body>

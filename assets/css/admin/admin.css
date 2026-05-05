@@ -488,3 +488,30 @@ tbody tr:hover {
     font-size: 24px;
   }
 }
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-light);
+  transition: background 0.2s, color 0.2s;
+}
+
+.btn-icon:hover {
+  background: var(--light-gray);
+  color: var(--text-dark);
+}
+
+.btn-icon.view {
+  color: #3498db;
+}
+
+.btn-icon.view:hover {
+  background: rgba(52, 152, 219, 0.1);
+}

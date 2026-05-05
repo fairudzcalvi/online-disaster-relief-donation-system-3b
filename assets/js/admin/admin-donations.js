@@ -132,7 +132,7 @@ function updateStats() {
   const totalCount = filteredDonations.length;
   const totalAmount = filteredDonations
     .filter(d => d.type === 'monetary')
-    .reduce((sum, d) => sum + d.amount, 0);
+    .reduce((sum, d) => sum + parseFloat(d.amount || 0), 0);
   const pendingCount = filteredDonations.filter(d => d.status === 'pending').length;
   const verifiedCount = filteredDonations.filter(d => d.status === 'verified').length;
 
