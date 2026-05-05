@@ -139,35 +139,43 @@ async function processPayment() {
     // Handled by completeDonation()
 }
 
-// Complete donation — submit to backend with receipt file
+// Complete donation — redirect to PayMongo checkout
 async function completeDonation() {
     const submitBtn = document.querySelector('[onclick="completeDonation()"]');
-    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Submitting...'; }
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Redirecting to payment...';
+    }
 
     try {
-        const formData = new FormData();
-        Object.entries(donorInfo).forEach(([key, val]) => formData.append(key, val));
-        if (uploadedReceiptFile) {
-            formData.append('receipt', uploadedReceiptFile);
-        }
-
-        const response = await fetch('api/auth/save_donation.php', {
+        const response = await fetch('api/auth/create_payment.php', {
             method: 'POST',
-            body: formData
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(donorInfo)
         });
 
         const result = await response.json();
 
-        if (result.status === 'success') {
-            showSuccessModal(result.reference);
+        if (result.status === 'success' && result.checkoutUrl) {
+            // Store reference in sessionStorage so we can show it on return
+            sessionStorage.setItem('donationReference', result.reference);
+            sessionStorage.setItem('donationAmount', selectedAmount);
+            // Redirect to PayMongo checkout (GCash/Maya)
+            window.location.href = result.checkoutUrl;
         } else {
-            alert('Submission failed: ' + (result.message || 'Please try again.'));
+            alert('Payment error: ' + (result.message || 'Please try again.'));
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Pay Now <i class="fas fa-arrow-right"></i>';
+            }
         }
     } catch (e) {
-        console.error('Donation submission error:', e);
+        console.error('Payment error:', e);
         alert('Network error. Please try again.');
-    } finally {
-        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit Donation ❤'; }
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = 'Pay Now <i class="fas fa-arrow-right"></i>';
+        }
     }
 }
 
@@ -231,12 +239,23 @@ function handleFileUpload(file) {
     uploadArea.style.display = 'none';
 }
 
-// Check for payment success on page load
+// Check for payment result on page load (after PayMongo redirect)
 window.addEventListener('load', function() {
     const urlParams = new URLSearchParams(window.location.search);
     const paymentStatus = urlParams.get('payment');
+
     if (paymentStatus === 'success') {
-        showSuccessModal();
+        const ref = urlParams.get('ref') || sessionStorage.getItem('donationReference') || 'REF-XXXX';
+        const amt = parseFloat(urlParams.get('amt') || sessionStorage.getItem('donationAmount')) || 0;
+        selectedAmount = amt;
+        showSuccessModal(ref);
+        sessionStorage.removeItem('donationReference');
+        sessionStorage.removeItem('donationAmount');
+        // Clean URL
+        window.history.replaceState({}, '', window.location.pathname);
+    } else if (paymentStatus === 'failed') {
+        alert('Payment was not completed. Please try again.');
+        window.history.replaceState({}, '', 'donation-page.html');
     }
 });
 

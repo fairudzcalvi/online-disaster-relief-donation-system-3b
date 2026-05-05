@@ -311,7 +311,7 @@ function editDistribution(id) {
 // STATUS MANAGEMENT
 // ==========================================
 
-function updateDistributionStatus(id, newStatus) {
+async function updateDistributionStatus(id, newStatus) {
   const dist = distributions.find(d => d.id === id);
   if (!dist) return;
 
@@ -321,22 +321,56 @@ function updateDistributionStatus(id, newStatus) {
   };
 
   if (confirm(messages[newStatus] || 'Update distribution status?')) {
-    dist.status = newStatus;
-    applyFilters();
-    updateAllDisplays();
-    showNotification(`Distribution #DIST-${String(id).padStart(4, '0')} marked as ${newStatus}!`, 'success');
+    try {
+      const response = await fetch('../api/auth/update_status.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + (sessionStorage.getItem('adminToken') || '')
+        },
+        body: JSON.stringify({ type: 'distribution', id, status: newStatus })
+      });
+      const result = await response.json();
+      if (result.status === 'success') {
+        dist.status = newStatus;
+        applyFilters();
+        updateAllDisplays();
+        showNotification(`Distribution marked as ${newStatus}!`, 'success');
+      } else {
+        showNotification(result.message || 'Error updating status', 'error');
+      }
+    } catch (e) {
+      showNotification('Network error. Please try again.', 'error');
+    }
   }
 }
 
-function cancelDistribution(id) {
+async function cancelDistribution(id) {
   const dist = distributions.find(d => d.id === id);
   if (!dist || dist.status !== 'pending') return;
 
   if (confirm('Are you sure you want to cancel this distribution?')) {
-    dist.status = 'cancelled';
-    applyFilters();
-    updateAllDisplays();
-    showNotification('Distribution cancelled successfully.', 'success');
+    try {
+      const response = await fetch('../api/auth/update_status.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + (sessionStorage.getItem('adminToken') || '')
+        },
+        body: JSON.stringify({ type: 'distribution', id, status: 'cancelled' })
+      });
+      const result = await response.json();
+      if (result.status === 'success') {
+        dist.status = 'cancelled';
+        applyFilters();
+        updateAllDisplays();
+        showNotification('Distribution cancelled successfully.', 'success');
+      } else {
+        showNotification(result.message || 'Error cancelling distribution', 'error');
+      }
+    } catch (e) {
+      showNotification('Network error. Please try again.', 'error');
+    }
   }
 }
 
@@ -565,8 +599,7 @@ function exportToCSV() {
 // ==========================================
 
 function refreshData() {
-  applyFilters();
-  updateAllDisplays();
+  loadDistributions();
   showNotification('Data refreshed successfully!', 'success');
 }
 

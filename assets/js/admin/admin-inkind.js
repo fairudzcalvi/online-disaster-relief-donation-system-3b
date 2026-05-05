@@ -360,37 +360,47 @@ function closeDetailsModal() {
 }
 
 // Verify item
-function verifyItem(id) {
-  const item = items.find(i => i.id === id);
-  if (item && item.status === 'pending') {
-    item.status = 'verified';
-    applyFilters();
-    updateAllStats();
-    showNotification(`Item "${item.name}" has been verified!`, 'success');
-  }
+async function verifyItem(id) {
+  await updateItemStatus(id, 'verified', `Item verified!`);
 }
 
 // Mark as stored
-function markStored(id) {
-  const item = items.find(i => i.id === id);
-  if (item && item.status === 'verified') {
-    item.status = 'stored';
-    applyFilters();
-    updateAllStats();
-    showNotification(`Item "${item.name}" marked as stored in inventory!`, 'success');
-  }
+async function markStored(id) {
+  await updateItemStatus(id, 'stored', `Item marked as stored!`);
 }
 
 // Allocate item
-function allocateItem(id) {
+async function allocateItem(id) {
   const item = items.find(i => i.id === id);
   if (item && item.status === 'stored') {
     if (confirm(`Allocate "${item.name}" (${item.quantity} ${item.unit}) for distribution?`)) {
-      item.status = 'allocated';
+      await updateItemStatus(id, 'allocated', `Item allocated for distribution!`);
+    }
+  }
+}
+
+async function updateItemStatus(id, status, successMsg) {
+  try {
+    const response = await fetch('../api/auth/update_status.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + (sessionStorage.getItem('adminToken') || '')
+      },
+      body: JSON.stringify({ type: 'item', id, status })
+    });
+    const result = await response.json();
+    if (result.status === 'success') {
+      const item = items.find(i => i.id === id);
+      if (item) item.status = status;
       applyFilters();
       updateAllStats();
-      showNotification(`Item "${item.name}" allocated for distribution!`, 'success');
+      showNotification(successMsg, 'success');
+    } else {
+      showNotification(result.message || 'Error updating status', 'error');
     }
+  } catch (e) {
+    showNotification('Network error. Please try again.', 'error');
   }
 }
 
@@ -451,9 +461,8 @@ function exportToCSV() {
 }
 
 // Refresh data
-function refreshData() {
-  applyFilters();
-  updateAllStats();
+async function refreshData() {
+  await loadItems();
   showNotification('Data refreshed successfully!', 'success');
 }
 

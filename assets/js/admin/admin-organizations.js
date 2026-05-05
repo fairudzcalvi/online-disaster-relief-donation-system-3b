@@ -484,8 +484,7 @@ function exportToCSV() {
 // ==========================================
 
 function refreshData() {
-  applyFilters();
-  updateStatistics();
+  loadOrganizations();
   showNotification('Data refreshed successfully!', 'success');
 }
 

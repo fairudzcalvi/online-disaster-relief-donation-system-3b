@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -170,7 +170,7 @@
             <div class="donate-step hidden" id="stepPayment">
                 <div class="step-content">
                     <h1 class="donate-title">Complete Your Donation</h1>
-                    <p class="donate-subtitle">Scan the QR code and upload your payment proof</p>
+                    <p class="donate-subtitle">You'll be redirected to GCash or Maya to complete your payment securely</p>
 
                     <div class="donation-summary large">
                         <div class="summary-row">
@@ -184,37 +184,19 @@
                         <div class="summary-donor" id="donorName"></div>
                     </div>
 
-                    <div class="qr-container">
-                        <h3 class="qr-title">Scan to Pay via <span id="paymentApp">GCash</span></h3>
-                        <div class="qr-code">
-                            <i class="fas fa-qrcode"></i>
-                            <p>QR Code Coming Soon</p>
+                    <div class="qr-container" style="text-align:center; padding: 40px 32px;">
+                        <div style="width:80px;height:80px;background:rgba(39,174,96,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+                            <i class="fas fa-mobile-alt" style="font-size:36px;color:var(--primary-green);"></i>
                         </div>
-                        <div class="qr-instructions">
-                            <p><strong>Payment Instructions:</strong></p>
-                            <ol>
-                                <li>Open your <span id="paymentAppInstructions">GCash</span> app</li>
-                                <li>Scan this QR code</li>
-                                <li>Enter the amount: <strong id="qrAmount">PHP 0.00</strong></li>
-                                <li>Complete the payment</li>
-                                <li>Take a screenshot of the confirmation</li>
-                            </ol>
-                        </div>
-                    </div>
-
-                    <div class="receipt-upload">
-                        <h3 class="upload-title">Upload Payment Proof</h3>
-                        <p class="upload-desc">Please upload a screenshot of your payment confirmation</p>
-                        <div class="upload-area" id="uploadArea">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <p>Click to upload or drag and drop</p>
-                            <span class="upload-hint">PNG, JPG up to 5MB</span>
-                            <input type="file" id="receiptFile" accept="image/*" hidden>
-                        </div>
-                        <div class="uploaded-file hidden" id="uploadedFile">
-                            <i class="fas fa-check-circle"></i>
-                            <span id="fileName">receipt.jpg</span>
-                        </div>
+                        <h3 style="font-size:20px;font-weight:700;color:var(--text-dark);margin-bottom:12px;">
+                            Pay via <span id="paymentApp">GCash</span>
+                        </h3>
+                        <p style="color:var(--text-light);font-size:15px;line-height:1.6;max-width:400px;margin:0 auto 8px;">
+                            Clicking "Pay Now" will redirect you to <span id="paymentAppInstructions">GCash</span> to complete your payment securely through PayMongo.
+                        </p>
+                        <p style="color:var(--text-light);font-size:13px;">
+                            You will be brought back here automatically after payment.
+                        </p>
                     </div>
 
                     <div class="button-group">
@@ -223,15 +205,15 @@
                             Back
                         </button>
                         <button class="btn btn-primary btn-large" onclick="completeDonation()">
-                            Submit Donation
-                            <i class="fas fa-heart"></i>
+                            Pay Now
+                            <i class="fas fa-arrow-right"></i>
                         </button>
                     </div>
 
                     <div class="trust-badges">
                         <div class="trust-badge">
                             <i class="fas fa-lock"></i>
-                            <span>Secure</span>
+                            <span>Secured by PayMongo</span>
                         </div>
                         <div class="trust-badge">
                             <i class="fas fa-shield-alt"></i>

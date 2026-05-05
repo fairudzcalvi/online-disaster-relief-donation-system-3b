@@ -5,10 +5,27 @@ let donations = [];
 let filteredDonations = [];
 
 // Initialize page
-document.addEventListener('DOMContentLoaded', function() {
-  renderTable();
+document.addEventListener('DOMContentLoaded', async function() {
+  await loadDonations();
   setupEventListeners();
 });
+
+async function loadDonations() {
+  try {
+    const response = await fetch('../api/auth/get_donations.php', {
+      headers: { 'Authorization': 'Bearer ' + (sessionStorage.getItem('adminToken') || '') }
+    });
+    const data = await response.json();
+    if (data.status === 'success') {
+      donations = data.data;
+    }
+  } catch (e) {
+    console.error('Failed to load donations:', e);
+  }
+  filteredDonations = [...donations];
+  renderTable();
+  updateStats();
+}
 
 // Setup event listeners
 function setupEventListeners() {
@@ -28,8 +45,8 @@ function setupEventListeners() {
   document.getElementById('exportBtn').addEventListener('click', exportToCSV);
   
   // Refresh button
-  document.getElementById('refreshBtn').addEventListener('click', function() {
-    applyFilters();
+  document.getElementById('refreshBtn').addEventListener('click', async function() {
+    await loadDonations();
     showNotification('Data refreshed successfully!', 'success');
   });
   
@@ -270,44 +287,48 @@ function closeModal() {
 }
 
 // Approve donation
-function approveDonation(id) {
-  const donation = donations.find(d => d.id === id);
-  if (donation) {
-    donation.status = 'verified';
-    applyFilters();
-    showNotification(`Donation ${donation.referenceNo} has been verified!`, 'success');
-  }
+async function approveDonation(id) {
+  await updateDonationStatus(id, 'verified');
 }
 
 // Reject donation
-function rejectDonation(id) {
+async function rejectDonation(id) {
   if (confirm('Are you sure you want to reject this donation?')) {
-    const donation = donations.find(d => d.id === id);
-    if (donation) {
-      donation.status = 'rejected';
-      applyFilters();
-      showNotification(`Donation ${donation.referenceNo} has been rejected.`, 'error');
-    }
+    await updateDonationStatus(id, 'rejected');
   }
 }
 
 // Mark as received
-function markReceived(id) {
-  const donation = donations.find(d => d.id === id);
-  if (donation) {
-    donation.status = 'received';
-    applyFilters();
-    showNotification(`Donation ${donation.referenceNo} marked as received!`, 'success');
-  }
+async function markReceived(id) {
+  await updateDonationStatus(id, 'received');
 }
 
 // Mark as distributed
-function markDistributed(id) {
-  const donation = donations.find(d => d.id === id);
-  if (donation) {
-    donation.status = 'distributed';
-    applyFilters();
-    showNotification(`Donation ${donation.referenceNo} marked as distributed!`, 'success');
+async function markDistributed(id) {
+  await updateDonationStatus(id, 'distributed');
+}
+
+async function updateDonationStatus(id, status) {
+  try {
+    const response = await fetch('../api/auth/update_status.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + (sessionStorage.getItem('adminToken') || '')
+      },
+      body: JSON.stringify({ type: 'donation', id, status })
+    });
+    const result = await response.json();
+    if (result.status === 'success') {
+      const donation = donations.find(d => d.id === id);
+      if (donation) donation.status = status;
+      applyFilters();
+      showNotification(`Donation status updated to ${status}!`, 'success');
+    } else {
+      showNotification(result.message || 'Error updating status', 'error');
+    }
+  } catch (e) {
+    showNotification('Network error. Please try again.', 'error');
   }
 }
 
