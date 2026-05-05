@@ -1,5 +1,5 @@
 <?php
-require_once '../config/database.php';
+require_once __DIR__ . '/../config/database.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -39,7 +39,9 @@ $amountCentavos = (int)($amount * 100);
 // Determine the base URL dynamically
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
 $host = $_SERVER['HTTP_HOST'];
-$baseUrl = $protocol . '://' . $host . '/online_disaster/public_html';
+// On Railway the app runs at root; locally it's in a subfolder
+$isLocal = in_array($host, ['localhost', '127.0.0.1']) || str_contains($host, 'localhost:');
+$baseUrl = $protocol . '://' . $host . ($isLocal ? '/online_disaster/public_html' : '');
 
 // Map payment method to PayMongo source type
 $sourceType = $paymentMethod === 'grab_pay' ? 'grab_pay' : 'gcash';
@@ -120,3 +122,4 @@ try {
     echo json_encode(["status" => "error", "message" => "Database error: " . $e->getMessage()]);
 }
 ?>
+

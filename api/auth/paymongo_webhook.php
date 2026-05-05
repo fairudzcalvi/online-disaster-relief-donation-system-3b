@@ -1,5 +1,5 @@
 <?php
-require_once '../config/database.php';
+require_once __DIR__ . '/../config/database.php';
 
 // PayMongo sends a POST with a signature header
 $payload   = file_get_contents("php://input");
@@ -93,3 +93,4 @@ if ($eventType === 'source.failed') {
 http_response_code(200);
 echo json_encode(["status" => "success"]);
 ?>
+

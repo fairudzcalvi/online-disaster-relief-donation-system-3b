@@ -1,5 +1,5 @@
 <?php
-require_once '../config/database.php';
+require_once __DIR__ . '/../config/database.php';
 require_once 'verify_token.php';
 
 $conn = getDBConnection();
@@ -12,3 +12,4 @@ $stmt->execute();
 http_response_code(200);
 echo json_encode(["success" => true, "message" => "Logged out successfully"]);
 ?>
+
