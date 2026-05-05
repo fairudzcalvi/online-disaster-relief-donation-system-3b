@@ -292,7 +292,7 @@ function setupHeaderActions() {
   });
 
   document.getElementById("newCampaignBtn").addEventListener("click", () => {
-    showNotification("Campaign creation feature coming soon!", "info");
+    window.location.href = "admin-campaigns.php";
   });
 
   document.getElementById("logoutBtn").addEventListener("click", () => {

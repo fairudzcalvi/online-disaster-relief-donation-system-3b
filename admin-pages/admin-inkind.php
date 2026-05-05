@@ -1,47 +1,4 @@
- <?php
-require_once '../api/config/database.php';
 
-try {
-    // Get PDO connection
-    $pdo = getDBConnection();  // Make sure this returns a PDO instance
-
-    // Prepare and execute SQL
-    $sql = "SELECT SUM(Item_Amount) AS total FROM in_kind_donations";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
-
-    // Fetch result
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-} catch (PDOException $e) {
-    echo "Database error: " . $e->getMessage();
-}
-
-
-
-    $sl = "SELECT SUM(Item_Amount) AS toal FROM in_kind_donations WHERE Item_Status ='pending'";
-    $stt = $pdo->prepare($sl);
-    $stt->execute();
-
-    // Fetch result
-    $rw = $stt->fetch(PDO::FETCH_ASSOC);
-
-    $slss = "SELECT SUM(Item_Amount) AS tosal FROM in_kind_donations WHERE Item_Status ='allocated'";
-    $sttss = $pdo->prepare($slss);
-    $sttss->execute();
-
-    // Fetch result
-    $rwss = $sttss->fetch(PDO::FETCH_ASSOC);
-
-    $slg = "SELECT SUM(Item_Amount) AS topal FROM in_kind_donations WHERE Item_Status ='distributed'";
-    $sttg = $pdo->prepare($slg);
-    $sttg->execute();
-
-    // Fetch result
-    $rwgg = $sttg->fetch(PDO::FETCH_ASSOC);
-
-
-  ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

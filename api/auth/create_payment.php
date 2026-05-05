@@ -42,7 +42,7 @@ $host = $_SERVER['HTTP_HOST'];
 $baseUrl = $protocol . '://' . $host . '/online_disaster/public_html';
 
 // Map payment method to PayMongo source type
-$sourceType = $paymentMethod === 'maya' ? 'paymaya' : 'gcash';
+$sourceType = $paymentMethod === 'grab_pay' ? 'grab_pay' : 'gcash';
 
 // Generate reference number early so it can be used in the redirect URL
 $reference = 'DON-' . strtoupper(substr(md5(uniqid()), 0, 8));

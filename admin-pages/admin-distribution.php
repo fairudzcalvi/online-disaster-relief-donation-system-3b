@@ -1,15 +1,4 @@
-<?php
-require_once '../api/config/database.php';
-$db = getDBConnection();
 
-$sql = "SELECT COUNT(Distribution_ID) AS total FROM distributions";
-    $stmt = $db->prepare($sql);
-    $stmt->execute();
-
-    // Fetch result
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -370,3 +359,4 @@ $sql = "SELECT COUNT(Distribution_ID) AS total FROM distributions";
   <script src="../assets/js/admin/admin-distribution.js"></script>
 </body>
 </html>
+?>

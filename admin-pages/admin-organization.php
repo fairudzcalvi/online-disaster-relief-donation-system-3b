@@ -1,42 +1,4 @@
-  <?php
-require_once '../api/config/database.php';
-$db = getDBConnection();
-try {
-    // Get PDO connection  // Make sure this returns a PDO instance
 
-    // Prepare and execute SQL
-    $sql = "SELECT COUNT(Organization_ID) AS total FROM organization";
-    $stmt = $db->prepare($sql);
-    $stmt->execute();
-
-    // Fetch result
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    echo "Database error: " . $e->getMessage();
-}
-
-    $query = "SELECT COUNT(Organization_ID) AS total_active
-              FROM organization
-              WHERE Organization_Status = 1";
-    
-    $stmts = $db->prepare($query);
-    $stmts->execute();
-
-    $result = $stmts->fetch(PDO::FETCH_ASSOC);
-
-    $querys = "SELECT COUNT(Organization_ID) AS total_inactive
-              FROM organization
-              WHERE Organization_Status = 0";
-    
-    $stmtss = $db->prepare($querys);
-    $stmtss->execute();
-
-    $resultss = $stmtss->fetch(PDO::FETCH_ASSOC);
-
-
-
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

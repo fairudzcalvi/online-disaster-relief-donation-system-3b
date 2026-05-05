@@ -48,7 +48,7 @@ function updateQRCode() {
     }
     
     if (paymentApp && paymentAppInstructions && selectedPaymentMethod) {
-        const appName = selectedPaymentMethod === 'gcash' ? 'GCash' : 'Maya';
+        const appName = selectedPaymentMethod === 'grab_pay' ? 'GrabPay' : 'GCash';
         paymentApp.textContent = appName;
         paymentAppInstructions.textContent = appName;
     }
@@ -98,7 +98,7 @@ async function goToStep(stepNumber) {
         
         // Update payment page summary
         document.getElementById('finalAmount').textContent = `PHP ${selectedAmount.toLocaleString('en-PH', {minimumFractionDigits: 2})}`;
-        document.getElementById('paymentMethodDisplay').textContent = selectedPaymentMethod === 'gcash' ? 'GCash' : 'Maya';
+        document.getElementById('paymentMethodDisplay').textContent = selectedPaymentMethod === 'grab_pay' ? 'GrabPay' : 'GCash';
         document.getElementById('donorName').textContent = donorInfo.anonymous ? 
             'Anonymous Donor' : 
             `${donorInfo.firstName} ${donorInfo.lastName}`;
