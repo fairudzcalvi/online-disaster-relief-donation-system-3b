@@ -1,7 +1,8 @@
 // API Client - Handles all backend communication
 class APIClient {
   constructor() {
-    this.baseURL = '/online_disaster/public_html/api/auth/';
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    this.baseURL = isLocal ? '/online_disaster/public_html/api/auth/' : '/api/auth/';
   }
 
   async request(endpoint, method = 'GET', data = null) {
