@@ -143,8 +143,6 @@
               <div class="form-group">
                 <label for="exportFormat">Export Format <span class="required">*</span></label>
                 <select id="exportFormat" required>
-                  <option value="pdf">PDF Document</option>
-                  <option value="excel">Excel Spreadsheet (XLSX)</option>
                   <option value="csv">CSV File</option>
                 </select>
               </div>

@@ -296,13 +296,7 @@ function setupHeaderActions() {
   });
 
   document.getElementById("logoutBtn").addEventListener("click", () => {
-    if (confirm("Are you sure you want to logout?")) {
-      fetch('../api/auth/logout.php', { method: 'POST' }).finally(() => {
-        sessionStorage.clear();
-        localStorage.clear();
-        window.location.href = "admin_logIn.html";
-      });
-    }
+    document.getElementById('logoutModal').style.display = 'flex';
   });
 
   document.getElementById("viewAllDonationsBtn").addEventListener("click", () => {
@@ -528,3 +522,15 @@ window.adminDashboard = {
   calculateDashboardStats,
   syncDataWithModules
 };
+
+function confirmLogout() {
+  fetch('../api/auth/logout.php', { method: 'POST' }).finally(() => {
+    sessionStorage.clear();
+    localStorage.clear();
+    window.location.href = "admin_logIn.html";
+  });
+}
+
+function closeLogoutModal() {
+  document.getElementById('logoutModal').style.display = 'none';
+}

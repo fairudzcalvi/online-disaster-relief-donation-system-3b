@@ -171,6 +171,21 @@
 
   </main>
 
+  <!-- Logout Confirmation Modal -->
+  <div id="logoutModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:12px;width:100%;max-width:400px;padding:32px;text-align:center;">
+      <div style="width:56px;height:56px;background:rgba(231,76,60,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+        <i class="fa-solid fa-right-from-bracket" style="font-size:24px;color:#e74c3c;"></i>
+      </div>
+      <h3 style="font-size:18px;font-weight:700;margin-bottom:8px;">Logout</h3>
+      <p style="color:var(--text-light);font-size:14px;margin-bottom:24px;">Are you sure you want to logout?</p>
+      <div style="display:flex;gap:12px;justify-content:center;">
+        <button class="btn btn-outline" onclick="closeLogoutModal()">Cancel</button>
+        <button class="btn btn-primary" style="background:#e74c3c;border-color:#e74c3c;" onclick="confirmLogout()">Logout</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Donation Detail Modal -->
   <div class="modal" id="donationDetailModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;">
     <div class="modal-content" style="background:#fff;border-radius:12px;width:100%;max-width:480px;padding:0;overflow:hidden;">

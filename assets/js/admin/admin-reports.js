@@ -302,20 +302,62 @@ function downloadReportById(id) {
   }
 }
 
-// Download report (simulate)
-function downloadReport(report) {
-  const filename = `${report.name.replace(/\s+/g, '_')}_${Date.now()}.${report.format}`;
-  
-  console.log('Downloading report:', filename);
-  
-  // In production, this would trigger actual file download
-  showNotification(`Downloading ${filename}...`, 'success');
-  
-  // Simulate download
-  const link = document.createElement('a');
-  link.download = filename;
-  link.href = '#';
-  link.click();
+// Download report (real CSV export)
+async function downloadReport(report) {
+  const token = sessionStorage.getItem('adminToken') || '';
+  const headers = { 'Authorization': 'Bearer ' + token };
+
+  try {
+    let rows = [];
+    let filename = report.name.replace(/\s+/g, '_') + '.csv';
+
+    // Fetch real data based on report type
+    if (report.type === 'monetary-donations' || report.type === 'donor-contributions' || report.type === 'monthly-donations') {
+      const res = await fetch('../api/auth/get_donations.php', { headers });
+      const data = await res.json();
+      const donations = (data.data || []).filter(d => {
+        const date = d.date || d.Donation_Date;
+        return (!report.dateFrom || date >= report.dateFrom) && (!report.dateTo || date <= report.dateTo);
+      });
+      rows = [['Reference', 'Donor', 'Email', 'Amount', 'Payment Method', 'Status', 'Date']];
+      donations.forEach(d => rows.push([
+        d.referenceNo || '', d.donor?.name || '', d.donor?.email || '',
+        d.amount || '', d.paymentMethod || '', d.status || '', d.date || ''
+      ]));
+    } else if (report.type === 'inkind-donations' || report.type === 'inventory-balance' || report.type === 'inventory-status') {
+      const res = await fetch('../api/auth/get_items.php', { headers });
+      const data = await res.json();
+      rows = [['Item', 'Category', 'Quantity', 'Unit', 'Donor', 'Date Received', 'Status']];
+      (data.data || []).forEach(i => rows.push([i.name, i.category, i.quantity, i.unit, i.donor, i.dateReceived, i.status]));
+    } else if (report.type === 'distribution-history' || report.type === 'distribution-summary') {
+      const res = await fetch('../api/auth/get_distributions.php', { headers });
+      const data = await res.json();
+      rows = [['ID', 'Location', 'Date', 'Type', 'Beneficiaries', 'Team Leader', 'Status']];
+      (data.data || []).forEach(d => rows.push([
+        `DIST-${String(d.id).padStart(4,'0')}`, d.location, d.date, d.type, d.beneficiaries, d.teamLeader, d.status
+      ]));
+    } else {
+      // Default — donations summary
+      const res = await fetch('../api/auth/get_donations.php', { headers });
+      const data = await res.json();
+      rows = [['Reference', 'Donor', 'Amount', 'Status', 'Date']];
+      (data.data || []).forEach(d => rows.push([d.referenceNo || '', d.donor?.name || '', d.amount || '', d.status || '', d.date || '']));
+    }
+
+    const csv = rows.map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.click();
+    URL.revokeObjectURL(url);
+
+    showNotification(`Report downloaded as CSV`, 'success');
+  } catch (e) {
+    showNotification('Failed to generate report. Please try again.', 'error');
+    console.error(e);
+  }
 }
 
 // Regenerate report
