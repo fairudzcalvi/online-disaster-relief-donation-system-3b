@@ -373,9 +373,11 @@ async function markStored(id) {
 async function allocateItem(id) {
   const item = items.find(i => i.id === id);
   if (item && item.status === 'stored') {
-    if (confirm(`Allocate "${item.name}" (${item.quantity} ${item.unit}) for distribution?`)) {
-      await updateItemStatus(id, 'allocated', `Item allocated for distribution!`);
-    }
+    showConfirmModal(
+      `Allocate "${item.name}"?`,
+      `${item.quantity} ${item.unit} will be allocated for distribution.`,
+      async () => { await updateItemStatus(id, 'allocated', 'Item allocated for distribution!'); }
+    );
   }
 }
 
@@ -414,12 +416,41 @@ function deleteItem(id) {
     return;
   }
 
-  if (confirm(`Are you sure you want to delete "${item.name}"?`)) {
+  showConfirmModal(`Delete "${item.name}"?`, 'This action cannot be undone.', () => {
     items = items.filter(i => i.id !== id);
     applyFilters();
     updateAllStats();
     showNotification('Item deleted successfully', 'success');
+  });
+}
+
+function showConfirmModal(title, message, onConfirm) {
+  let modal = document.getElementById('confirmModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'confirmModal';
+    modal.style.cssText = 'display:flex;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;';
+    modal.innerHTML = `
+      <div style="background:#fff;border-radius:12px;width:100%;max-width:400px;padding:32px;text-align:center;">
+        <div style="width:56px;height:56px;background:rgba(231,76,60,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+          <i class="fa-solid fa-triangle-exclamation" style="font-size:24px;color:#e74c3c;"></i>
+        </div>
+        <h3 id="confirmTitle" style="font-size:18px;font-weight:700;margin-bottom:8px;"></h3>
+        <p id="confirmMessage" style="color:#666;font-size:14px;margin-bottom:24px;"></p>
+        <div style="display:flex;gap:12px;justify-content:center;">
+          <button class="btn btn-outline" onclick="document.getElementById('confirmModal').style.display='none'">Cancel</button>
+          <button id="confirmOkBtn" class="btn btn-primary" style="background:#e74c3c;border-color:#e74c3c;">Delete</button>
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
   }
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmMessage').textContent = message;
+  modal.style.display = 'flex';
+  document.getElementById('confirmOkBtn').onclick = () => {
+    modal.style.display = 'none';
+    onConfirm();
+  };
 }
 
 // Export to CSV
@@ -513,6 +544,18 @@ function escapeHtml(text) {
 }
 
 function showNotification(message, type = 'info') {
-  alert(message);
-  // In production, replace with a proper notification library
+  let toast = document.getElementById('inkindToast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'inkindToast';
+    toast.style.cssText = 'position:fixed;top:24px;right:24px;padding:12px 20px;border-radius:8px;font-size:14px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.15);transition:opacity 0.3s;';
+    document.body.appendChild(toast);
+  }
+  const colors = { success: '#27ae60', error: '#e74c3c', info: '#3498db' };
+  toast.style.background = colors[type] || colors.info;
+  toast.style.color = '#fff';
+  toast.textContent = message;
+  toast.style.opacity = '1';
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { toast.style.opacity = '0'; }, 3000);
 }
