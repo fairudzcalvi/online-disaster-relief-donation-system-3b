@@ -7,6 +7,9 @@ let organizations = [];
 let filteredOrganizations = [];
 let editingOrgId = null;
 let currentViewingOrgId = null;
+const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const API_BASE = isLocal ? '../api/auth/' : '/api/auth/';
+const getAuthHeaders = () => ({ 'Authorization': 'Bearer ' + (sessionStorage.getItem('adminToken') || '') });
 
 // ==========================================
 // INITIALIZATION
@@ -19,8 +22,8 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 async function loadOrganizations() {
   try {
-    const response = await fetch('../api/auth/get_organizations.php', {
-      headers: { 'Authorization': 'Bearer ' + (sessionStorage.getItem('adminToken') || '') }
+    const response = await fetch(API_BASE + 'get_organizations.php', {
+      headers: getAuthHeaders()
     });
     const data = await response.json();
     if (data.status === 'success') {
@@ -274,9 +277,9 @@ async function saveOrganization() {
   formData.set('orgId', document.getElementById('orgId').value || '');
 
   try {
-    const response = await fetch('../api/auth/save_organizations.php', {
+    const response = await fetch(API_BASE + 'save_organizations.php', {
       method: 'POST',
-      headers: { 'Authorization': 'Bearer ' + (sessionStorage.getItem('adminToken') || '') },
+      headers: getAuthHeaders(),
       body: formData
     });
     const result = await response.json();

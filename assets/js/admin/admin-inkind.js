@@ -1,6 +1,9 @@
 let items = [];
 let filteredItems = [];
 let editingItemId = null;
+const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const API_BASE = isLocal ? '../api/auth/' : '/api/auth/';
+const getAuthHeaders = () => ({ 'Authorization': 'Bearer ' + (sessionStorage.getItem('adminToken') || '') });
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', async function() {
@@ -10,8 +13,8 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 async function loadItems() {
   try {
-    const result = await fetch('../api/auth/get_items.php', {
-      headers: { 'Authorization': 'Bearer ' + (sessionStorage.getItem('adminToken') || '') }
+    const result = await fetch(API_BASE + 'get_items.php', {
+      headers: getAuthHeaders()
     });
     const data = await result.json();
     if (data.status === 'success') {
@@ -383,12 +386,9 @@ async function allocateItem(id) {
 
 async function updateItemStatus(id, status, successMsg) {
   try {
-    const response = await fetch('../api/auth/update_status.php', {
+    const response = await fetch(API_BASE + 'update_status.php', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + (sessionStorage.getItem('adminToken') || '')
-      },
+      headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
       body: JSON.stringify({ type: 'item', id, status })
     });
     const result = await response.json();

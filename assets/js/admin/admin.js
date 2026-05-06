@@ -486,12 +486,14 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 async function syncDataWithModules() {
   try {
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const API_BASE = isLocal ? '../api/auth/' : '/api/auth/';
     const token = sessionStorage.getItem('adminToken') || '';
     const headers = { 'Authorization': 'Bearer ' + token };
 
     const [donRes, distRes] = await Promise.all([
-      fetch('../api/auth/get_donations.php', { headers }).then(r => r.json()).catch(() => ({ data: [] })),
-      fetch('../api/auth/get_distributions.php', { headers }).then(r => r.json()).catch(() => ({ data: [] }))
+      fetch(API_BASE + 'get_donations.php', { headers }).then(r => r.json()).catch(() => ({ data: [] })),
+      fetch(API_BASE + 'get_distributions.php', { headers }).then(r => r.json()).catch(() => ({ data: [] }))
     ]);
 
     donations = donRes.data || [];
@@ -524,7 +526,9 @@ window.adminDashboard = {
 };
 
 function confirmLogout() {
-  fetch('../api/auth/logout.php', { method: 'POST' }).finally(() => {
+  const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  const API_BASE = isLocal ? '../api/auth/' : '/api/auth/';
+  fetch(API_BASE + 'logout.php', { method: 'POST' }).finally(() => {
     sessionStorage.clear();
     localStorage.clear();
     window.location.href = "admin_logIn.html";

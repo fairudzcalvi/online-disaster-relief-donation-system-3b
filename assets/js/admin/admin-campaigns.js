@@ -1,6 +1,8 @@
 let campaigns = [];
 const token = sessionStorage.getItem('adminToken') || '';
 const headers = { 'Authorization': 'Bearer ' + token };
+const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const API_BASE = isLocal ? '../api/auth/' : '/api/auth/';
 
 document.addEventListener('DOMContentLoaded', () => {
     loadCampaigns();
@@ -14,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function loadCampaigns() {
     const tbody = document.getElementById('campaignsTableBody');
     try {
-        const res = await fetch('../api/auth/get_campaigns.php', { headers });
+        const res = await fetch(API_BASE + 'get_campaigns.php', { headers });
         const result = await res.json();
 
         if (result.status !== 'success' || !result.data.length) {
@@ -80,7 +82,7 @@ async function saveCampaign(e) {
     const formData = new FormData(form);
 
     try {
-        const res = await fetch('../api/auth/save_campaign.php', {
+        const res = await fetch(API_BASE + 'save_campaign.php', {
             method: 'POST',
             headers,
             body: formData
@@ -104,7 +106,7 @@ async function deleteCampaign(id) {
         const formData = new FormData();
         formData.append('campaignId', id);
         formData.append('status', 'cancelled');
-        const res = await fetch('../api/auth/save_campaign.php', {
+        const res = await fetch(API_BASE + 'save_campaign.php', {
             method: 'POST',
             headers,
             body: formData

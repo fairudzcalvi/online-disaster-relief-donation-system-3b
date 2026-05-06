@@ -1,8 +1,8 @@
-// Donations data - In production, this would come from a database/API
-// Will be populated when donors submit donations through the donation form
 let donations = [];
-
 let filteredDonations = [];
+const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const API_BASE = isLocal ? '../api/auth/' : '/api/auth/';
+const getAuthHeaders = () => ({ 'Authorization': 'Bearer ' + (sessionStorage.getItem('adminToken') || '') });
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', async function() {
@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 async function loadDonations() {
   try {
-    const response = await fetch('../api/auth/get_donations.php', {
-      headers: { 'Authorization': 'Bearer ' + (sessionStorage.getItem('adminToken') || '') }
+    const response = await fetch(API_BASE + 'get_donations.php', {
+      headers: getAuthHeaders()
     });
     const data = await response.json();
     if (data.status === 'success') {
@@ -310,9 +310,9 @@ async function markDistributed(id) {
 
 async function updateDonationStatus(id, status) {
   try {
-    const response = await fetch('../api/auth/update_status.php', {
+    const response = await fetch(API_BASE + 'update_status.php', {
       method: 'POST',
-      headers: {
+      headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + (sessionStorage.getItem('adminToken') || '')
       },

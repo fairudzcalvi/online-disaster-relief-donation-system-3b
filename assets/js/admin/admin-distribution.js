@@ -3,6 +3,9 @@
 let distributions = [];
 let filteredDistributions = [];
 let editingDistributionId = null;
+const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const API_BASE = isLocal ? '../api/auth/' : '/api/auth/';
+const getAuthHeaders = () => ({ 'Authorization': 'Bearer ' + (sessionStorage.getItem('adminToken') || '') });
 
 // Initialization
 document.addEventListener('DOMContentLoaded', async function() {
@@ -12,8 +15,8 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 async function loadDistributions() {
   try {
-    const response = await fetch('../api/auth/get_distributions.php', {
-      headers: { 'Authorization': 'Bearer ' + (sessionStorage.getItem('adminToken') || '') }
+    const response = await fetch(API_BASE + 'get_distributions.php', {
+      headers: getAuthHeaders()
     });
     const data = await response.json();
     if (data.status === 'success') {
@@ -195,9 +198,9 @@ async function saveDistribution() {
   const formData = new FormData(form);
 
   try {
-    const response = await fetch('../api/auth/save_distribution.php', {
+    const response = await fetch(API_BASE + 'save_distribution.php', {
       method: 'POST',
-      headers: { 'Authorization': 'Bearer ' + (sessionStorage.getItem('adminToken') || '') },
+      headers: getAuthHeaders(),
       body: formData
     });
     const result = await response.json();
@@ -322,12 +325,9 @@ async function updateDistributionStatus(id, newStatus) {
 
   if (confirm(messages[newStatus] || 'Update distribution status?')) {
     try {
-      const response = await fetch('../api/auth/update_status.php', {
+      const response = await fetch(API_BASE + 'update_status.php', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + (sessionStorage.getItem('adminToken') || '')
-        },
+        headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
         body: JSON.stringify({ type: 'distribution', id, status: newStatus })
       });
       const result = await response.json();
@@ -351,12 +351,9 @@ async function cancelDistribution(id) {
 
   if (confirm('Are you sure you want to cancel this distribution?')) {
     try {
-      const response = await fetch('../api/auth/update_status.php', {
+      const response = await fetch(API_BASE + 'update_status.php', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + (sessionStorage.getItem('adminToken') || '')
-        },
+        headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
         body: JSON.stringify({ type: 'distribution', id, status: 'cancelled' })
       });
       const result = await response.json();
