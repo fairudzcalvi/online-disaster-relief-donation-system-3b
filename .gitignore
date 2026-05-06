@@ -1,5 +1,5 @@
-# Database config with credentials
-api/config/database.php
+# Database config with credentials - only ignore the example file
+api/config/database.php.example
 
 # OS files
 .DS_Store
