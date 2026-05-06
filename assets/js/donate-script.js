@@ -54,15 +54,32 @@ function updateQRCode() {
     }
 }
 
+// Toast notification
+function showToast(message, type = 'error') {
+    let toast = document.getElementById('donateToast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'donateToast';
+        toast.style.cssText = 'position:fixed;top:24px;left:50%;transform:translateX(-50%);padding:14px 24px;border-radius:10px;font-size:14px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.15);transition:opacity 0.3s;max-width:90vw;text-align:center;';
+        document.body.appendChild(toast);
+    }
+    toast.style.background = type === 'error' ? '#e74c3c' : '#27ae60';
+    toast.style.color = '#fff';
+    toast.textContent = message;
+    toast.style.opacity = '1';
+    clearTimeout(toast._timeout);
+    toast._timeout = setTimeout(() => { toast.style.opacity = '0'; }, 3500);
+}
+
 // Navigate to different steps
 async function goToStep(stepNumber) {
     if (stepNumber === 2) {
         if (selectedAmount < 100) {
-            alert('Please select or enter a donation amount (minimum PHP 100)');
+            showToast('Please select or enter a donation amount (minimum PHP 100)');
             return;
         }
         if (!selectedPaymentMethod) {
-            alert('Please select a payment method (GCash or GrabPay)');
+            showToast('Please select a payment method (GCash or GrabPay)');
             return;
         }
         document.getElementById('selectedAmount').textContent = `PHP ${selectedAmount.toLocaleString('en-PH', {minimumFractionDigits: 2})}`;
@@ -74,14 +91,14 @@ async function goToStep(stepNumber) {
         const email = document.getElementById('email').value.trim();
         
         if (!firstName || !lastName || !email) {
-            alert('Please fill in all required fields');
+            showToast('Please fill in all required fields');
             return;
         }
         
         // Validate email format
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            alert('Please enter a valid email address');
+            showToast('Please enter a valid email address');
             return;
         }
         
@@ -163,7 +180,7 @@ async function completeDonation() {
             // Redirect to PayMongo checkout (GCash/Maya)
             window.location.href = result.checkoutUrl;
         } else {
-            alert('Payment error: ' + (result.message || 'Please try again.'));
+            showToast('Payment error: ' + (result.message || 'Please try again.'));
             if (submitBtn) {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = 'Pay Now <i class="fas fa-arrow-right"></i>';
@@ -171,7 +188,7 @@ async function completeDonation() {
         }
     } catch (e) {
         console.error('Payment error:', e);
-        alert('Network error. Please try again.');
+        showToast('Network error. Please try again.');
         if (submitBtn) {
             submitBtn.disabled = false;
             submitBtn.innerHTML = 'Pay Now <i class="fas fa-arrow-right"></i>';
@@ -224,12 +241,12 @@ let uploadedReceiptFile = null;
 
 function handleFileUpload(file) {
     if (!file.type.startsWith('image/')) {
-        alert('Please upload an image file');
+        showToast('Please upload an image file');
         return;
     }
     
     if (file.size > 5 * 1024 * 1024) {
-        alert('File size must be less than 5MB');
+        showToast('File size must be less than 5MB');
         return;
     }
     
@@ -254,7 +271,7 @@ window.addEventListener('load', function() {
         // Clean URL
         window.history.replaceState({}, '', window.location.pathname);
     } else if (paymentStatus === 'failed') {
-        alert('Payment was not completed. Please try again.');
+        showToast('Payment was not completed. Please try again.', 'error');
         window.history.replaceState({}, '', 'donation-page.html');
     }
 });
