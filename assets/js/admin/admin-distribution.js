@@ -635,6 +635,18 @@ function escapeHtml(text) {
 }
 
 function showNotification(message, type = 'info') {
-  alert(message);
-  // In production, replace with a proper notification library
+  let toast = document.getElementById('distToast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'distToast';
+    toast.style.cssText = 'position:fixed;top:24px;right:24px;padding:12px 20px;border-radius:8px;font-size:14px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.15);transition:opacity 0.3s;';
+    document.body.appendChild(toast);
+  }
+  const colors = { success: '#27ae60', error: '#e74c3c', info: '#3498db' };
+  toast.style.background = colors[type] || colors.info;
+  toast.style.color = '#fff';
+  toast.textContent = message;
+  toast.style.opacity = '1';
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { toast.style.opacity = '0'; }, 3000);
 }
