@@ -26,7 +26,7 @@ function getDBConnection() {
 
 // CORS headers
 $allowed_origin = $_SERVER['HTTP_ORIGIN'] ?? '';
-$allowed_origins = ['http://localhost', 'http://127.0.0.1', 'http://localhost:8080'];
+$allowed_origins = ['http://localhost', 'http://127.0.0.1', 'http://localhost:8080', 'https://online-disaster-relief-donation-system-3b-production.up.railway.app/'];
 if (in_array($allowed_origin, $allowed_origins)) {
     header("Access-Control-Allow-Origin: $allowed_origin");
 } else {
