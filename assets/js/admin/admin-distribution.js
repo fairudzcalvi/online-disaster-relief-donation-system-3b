@@ -323,7 +323,7 @@ async function updateDistributionStatus(id, newStatus) {
     'completed': 'Mark this distribution as completed?'
   };
 
-  if (confirm(messages[newStatus] || 'Update distribution status?')) {
+  showDistConfirm(messages[newStatus] || 'Update distribution status?', async () => {
     try {
       const response = await fetch(API_BASE + 'update_status.php', {
         method: 'POST',
@@ -342,14 +342,14 @@ async function updateDistributionStatus(id, newStatus) {
     } catch (e) {
       showNotification('Network error. Please try again.', 'error');
     }
-  }
+  });
 }
 
 async function cancelDistribution(id) {
   const dist = distributions.find(d => d.id === id);
   if (!dist || dist.status !== 'pending') return;
 
-  if (confirm('Are you sure you want to cancel this distribution?')) {
+  showDistConfirm('Cancel this distribution?', async () => {
     try {
       const response = await fetch(API_BASE + 'update_status.php', {
         method: 'POST',
@@ -368,7 +368,31 @@ async function cancelDistribution(id) {
     } catch (e) {
       showNotification('Network error. Please try again.', 'error');
     }
+  });
+}
+
+function showDistConfirm(message, onConfirm) {
+  let modal = document.getElementById('distConfirmModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'distConfirmModal';
+    modal.style.cssText = 'display:flex;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;';
+    modal.innerHTML = `
+      <div style="background:#fff;border-radius:12px;width:100%;max-width:400px;padding:32px;text-align:center;">
+        <p id="distConfirmMsg" style="font-size:16px;font-weight:600;margin-bottom:24px;color:var(--text-dark);"></p>
+        <div style="display:flex;gap:12px;justify-content:center;">
+          <button class="btn btn-outline" onclick="document.getElementById('distConfirmModal').style.display='none'">Cancel</button>
+          <button id="distConfirmOk" class="btn btn-primary">Confirm</button>
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
   }
+  document.getElementById('distConfirmMsg').textContent = message;
+  modal.style.display = 'flex';
+  document.getElementById('distConfirmOk').onclick = () => {
+    modal.style.display = 'none';
+    onConfirm();
+  };
 }
 
 // ==========================================
@@ -432,12 +456,12 @@ function generateDetailsHTML(dist) {
         <div class="detail-grid">
           <div class="detail-item">
             <span class="detail-label">Amount per Beneficiary</span>
-            <span class="detail-value">₱${dist.monetaryAmount.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</span>
+            <span class="detail-value">₱${(parseFloat(dist.monetaryAmount) || 0).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</span>
           </div>
           <div class="detail-item">
             <span class="detail-label">Total Monetary Aid</span>
             <span class="detail-value" style="color: var(--primary-green); font-size: 18px;">
-              ₱${totalAmount.toLocaleString('en-PH', { minimumFractionDigits: 2 })}
+              ₱${(parseFloat(totalAmount) || 0).toLocaleString('en-PH', { minimumFractionDigits: 2 })}
             </span>
           </div>
         </div>
