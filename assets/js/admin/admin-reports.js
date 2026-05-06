@@ -1,6 +1,10 @@
 // Reports history data
 let reportsHistory = [];
 let currentPreviewReport = null;
+const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const API_BASE = isLocal ? '../api/auth/' : '/api/auth/';
+const token = sessionStorage.getItem('adminToken') || '';
+const authHeaders = { 'Authorization': 'Bearer ' + token };
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', function() {
@@ -304,41 +308,32 @@ function downloadReportById(id) {
 
 // Download report (real CSV export)
 async function downloadReport(report) {
-  const token = sessionStorage.getItem('adminToken') || '';
-  const headers = { 'Authorization': 'Bearer ' + token };
-
   try {
     let rows = [];
     let filename = report.name.replace(/\s+/g, '_') + '.csv';
 
-    // Fetch real data based on report type
     if (report.type === 'monetary-donations' || report.type === 'donor-contributions' || report.type === 'monthly-donations') {
-      const res = await fetch('../api/auth/get_donations.php', { headers });
+      const res = await fetch(API_BASE + 'get_donations.php', { headers: authHeaders });
       const data = await res.json();
-      const donations = (data.data || []).filter(d => {
-        const date = d.date || d.Donation_Date;
-        return (!report.dateFrom || date >= report.dateFrom) && (!report.dateTo || date <= report.dateTo);
-      });
       rows = [['Reference', 'Donor', 'Email', 'Amount', 'Payment Method', 'Status', 'Date']];
-      donations.forEach(d => rows.push([
+      (data.data || []).forEach(d => rows.push([
         d.referenceNo || '', d.donor?.name || '', d.donor?.email || '',
         d.amount || '', d.paymentMethod || '', d.status || '', d.date || ''
       ]));
     } else if (report.type === 'inkind-donations' || report.type === 'inventory-balance' || report.type === 'inventory-status') {
-      const res = await fetch('../api/auth/get_items.php', { headers });
+      const res = await fetch(API_BASE + 'get_items.php', { headers: authHeaders });
       const data = await res.json();
       rows = [['Item', 'Category', 'Quantity', 'Unit', 'Donor', 'Date Received', 'Status']];
       (data.data || []).forEach(i => rows.push([i.name, i.category, i.quantity, i.unit, i.donor, i.dateReceived, i.status]));
     } else if (report.type === 'distribution-history' || report.type === 'distribution-summary') {
-      const res = await fetch('../api/auth/get_distributions.php', { headers });
+      const res = await fetch(API_BASE + 'get_distributions.php', { headers: authHeaders });
       const data = await res.json();
       rows = [['ID', 'Location', 'Date', 'Type', 'Beneficiaries', 'Team Leader', 'Status']];
       (data.data || []).forEach(d => rows.push([
         `DIST-${String(d.id).padStart(4,'0')}`, d.location, d.date, d.type, d.beneficiaries, d.teamLeader, d.status
       ]));
     } else {
-      // Default — donations summary
-      const res = await fetch('../api/auth/get_donations.php', { headers });
+      const res = await fetch(API_BASE + 'get_donations.php', { headers: authHeaders });
       const data = await res.json();
       rows = [['Reference', 'Donor', 'Amount', 'Status', 'Date']];
       (data.data || []).forEach(d => rows.push([d.referenceNo || '', d.donor?.name || '', d.amount || '', d.status || '', d.date || '']));
@@ -352,8 +347,7 @@ async function downloadReport(report) {
     link.download = filename;
     link.click();
     URL.revokeObjectURL(url);
-
-    showNotification(`Report downloaded as CSV`, 'success');
+    showNotification('Report downloaded successfully', 'success');
   } catch (e) {
     showNotification('Failed to generate report. Please try again.', 'error');
     console.error(e);
@@ -364,36 +358,20 @@ async function downloadReport(report) {
 function regenerateReport(id) {
   const report = reportsHistory.find(r => r.id === id);
   if (!report) return;
-  
-  if (confirm(`Regenerate report "${report.name}"?`)) {
-    showNotification('Regenerating report...', 'info');
-    
-    setTimeout(() => {
-      const updatedReport = {
-        ...report,
-        id: Date.now(),
-        dateGenerated: new Date().toISOString()
-      };
-      
-      reportsHistory.unshift(updatedReport);
-      renderReportsHistory();
-      
-      showNotification('Report regenerated successfully!', 'success');
-      downloadReport(updatedReport);
-    }, 1500);
-  }
+  showNotification('Regenerating report...', 'info');
+  setTimeout(() => {
+    const updatedReport = { ...report, id: Date.now(), dateGenerated: new Date().toISOString() };
+    reportsHistory.unshift(updatedReport);
+    renderReportsHistory();
+    showNotification('Report regenerated successfully!', 'success');
+    downloadReport(updatedReport);
+  }, 1500);
 }
 
-// Delete report
 function deleteReport(id) {
-  const report = reportsHistory.find(r => r.id === id);
-  if (!report) return;
-  
-  if (confirm(`Delete report "${report.name}"?`)) {
-    reportsHistory = reportsHistory.filter(r => r.id !== id);
-    renderReportsHistory();
-    showNotification('Report deleted successfully', 'success');
-  }
+  reportsHistory = reportsHistory.filter(r => r.id !== id);
+  renderReportsHistory();
+  showNotification('Report deleted', 'success');
 }
 
 // Reset form
@@ -438,13 +416,18 @@ function escapeHtml(text) {
 }
 
 function showNotification(message, type = 'info') {
-  // Simple alert for now
-  // In production, use a proper notification library
-  console.log(`[${type.toUpperCase()}] ${message}`);
-  
-  if (type === 'success') {
-    alert('✓ ' + message);
-  } else if (type === 'error') {
-    alert('✗ ' + message);
+  let toast = document.getElementById('reportsToast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'reportsToast';
+    toast.style.cssText = 'position:fixed;top:24px;right:24px;padding:12px 20px;border-radius:8px;font-size:14px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.15);transition:opacity 0.3s;';
+    document.body.appendChild(toast);
   }
+  const colors = { success: '#27ae60', error: '#e74c3c', info: '#3498db' };
+  toast.style.background = colors[type] || colors.info;
+  toast.style.color = '#fff';
+  toast.textContent = message;
+  toast.style.opacity = '1';
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { toast.style.opacity = '0'; }, 3000);
 }
