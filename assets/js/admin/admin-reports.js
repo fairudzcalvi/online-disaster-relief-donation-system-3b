@@ -5,6 +5,7 @@ const isLocal = window.location.hostname === 'localhost' || window.location.host
 const API_BASE = isLocal ? '../api/auth/' : '/api/auth/';
 const token = sessionStorage.getItem('adminToken') || '';
 const authHeaders = { 'Authorization': 'Bearer ' + token };
+const getReportHeaders = () => ({ 'Authorization': 'Bearer ' + (sessionStorage.getItem('adminToken') || '') });
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', function() {
@@ -310,36 +311,68 @@ function downloadReportById(id) {
 async function downloadReport(report) {
   try {
     let rows = [];
-    let filename = report.name.replace(/\s+/g, '_') + '.csv';
+    const filename = report.name.replace(/\s+/g, '_') + '.csv';
+    const h = getReportHeaders();
 
-    if (report.type === 'monetary-donations' || report.type === 'donor-contributions' || report.type === 'monthly-donations') {
-      const res = await fetch(API_BASE + 'get_donations.php', { headers: authHeaders });
+    if (['monetary-donations', 'donor-contributions', 'monthly-donations', 'monthly-summary', 'quarterly-summary', 'annual-summary', 'top-donors'].includes(report.type)) {
+      const res = await fetch(API_BASE + 'get_donations.php', { headers: h });
       const data = await res.json();
-      rows = [['Reference', 'Donor', 'Email', 'Amount', 'Payment Method', 'Status', 'Date']];
+      rows = [['Reference', 'Donor', 'Email', 'Amount (PHP)', 'Payment Method', 'Status', 'Date']];
       (data.data || []).forEach(d => rows.push([
         d.referenceNo || '', d.donor?.name || '', d.donor?.email || '',
         d.amount || '', d.paymentMethod || '', d.status || '', d.date || ''
       ]));
-    } else if (report.type === 'inkind-donations' || report.type === 'inventory-balance' || report.type === 'inventory-status') {
-      const res = await fetch(API_BASE + 'get_items.php', { headers: authHeaders });
+    } else if (['inkind-donations', 'inventory-balance', 'inventory-status'].includes(report.type)) {
+      const res = await fetch(API_BASE + 'get_items.php', { headers: h });
       const data = await res.json();
       rows = [['Item', 'Category', 'Quantity', 'Unit', 'Donor', 'Date Received', 'Status']];
-      (data.data || []).forEach(i => rows.push([i.name, i.category, i.quantity, i.unit, i.donor, i.dateReceived, i.status]));
-    } else if (report.type === 'distribution-history' || report.type === 'distribution-summary') {
-      const res = await fetch(API_BASE + 'get_distributions.php', { headers: authHeaders });
+      (data.data || []).forEach(i => rows.push([
+        i.name || '', i.category || '', i.quantity || '', i.unit || '',
+        i.donor || '', i.dateReceived || '', i.status || ''
+      ]));
+    } else if (['distribution-history', 'distribution-summary'].includes(report.type)) {
+      const res = await fetch(API_BASE + 'get_distributions.php', { headers: h });
       const data = await res.json();
       rows = [['ID', 'Location', 'Date', 'Type', 'Beneficiaries', 'Team Leader', 'Status']];
       (data.data || []).forEach(d => rows.push([
-        `DIST-${String(d.id).padStart(4,'0')}`, d.location, d.date, d.type, d.beneficiaries, d.teamLeader, d.status
+        `DIST-${String(d.id).padStart(4,'0')}`, d.location || '', d.date || '',
+        d.type || '', d.beneficiaries || '', d.teamLeader || '', d.status || ''
       ]));
+    } else if (report.type === 'transparency-summary') {
+      // Combine donations + distributions for transparency
+      const [donRes, distRes] = await Promise.all([
+        fetch(API_BASE + 'get_donations.php', { headers: h }).then(r => r.json()),
+        fetch(API_BASE + 'get_distributions.php', { headers: h }).then(r => r.json())
+      ]);
+      const donations = donRes.data || [];
+      const distributions = distRes.data || [];
+      const totalRaised = donations.filter(d => d.status === 'verified').reduce((s, d) => s + parseFloat(d.amount || 0), 0);
+      const totalBeneficiaries = distributions.reduce((s, d) => s + parseInt(d.beneficiaries || 0), 0);
+      rows = [
+        ['Transparency Summary Report'],
+        ['Generated', new Date().toLocaleDateString('en-PH')],
+        [''],
+        ['Metric', 'Value'],
+        ['Total Verified Donations', `₱${totalRaised.toLocaleString('en-PH', {minimumFractionDigits: 2})}`],
+        ['Total Donations Count', donations.length],
+        ['Total Distributions', distributions.length],
+        ['Total Beneficiaries Served', totalBeneficiaries],
+        [''],
+        ['Donation Breakdown'],
+        ['Reference', 'Donor', 'Amount', 'Status', 'Date'],
+        ...donations.map(d => [d.referenceNo || '', d.donor?.name || '', d.amount || '', d.status || '', d.date || ''])
+      ];
     } else {
-      const res = await fetch(API_BASE + 'get_donations.php', { headers: authHeaders });
+      // Default fallback
+      const res = await fetch(API_BASE + 'get_donations.php', { headers: h });
       const data = await res.json();
       rows = [['Reference', 'Donor', 'Amount', 'Status', 'Date']];
-      (data.data || []).forEach(d => rows.push([d.referenceNo || '', d.donor?.name || '', d.amount || '', d.status || '', d.date || '']));
+      (data.data || []).forEach(d => rows.push([
+        d.referenceNo || '', d.donor?.name || '', d.amount || '', d.status || '', d.date || ''
+      ]));
     }
 
-    const csv = rows.map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+    const csv = rows.map(row => Array.isArray(row) ? row.map(cell => `"${cell}"`).join(',') : `"${row}"`).join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
