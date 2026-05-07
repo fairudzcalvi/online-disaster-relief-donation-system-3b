@@ -28,7 +28,6 @@
         <li><a href="admin-inkind.php" class="nav-link"><i class="fa-solid fa-box"></i> In-Kind Donations</a></li>
         <li><a href="admin-reports.php" class="nav-link"><i class="fa-solid fa-chart-column"></i> Reports</a></li>
         <li><a href="admin-organization.php" class="nav-link active"><i class="fa-solid fa-building"></i> Organizations</a></li>
-        <li><a href="admin-settings.php" class="nav-link"><i class="fa-solid fa-gear"></i> Settings</a></li>
 
       </ul>
     </nav>
@@ -233,7 +232,7 @@
 
             <div class="form-group">
               <label for="address">Office Address</label>
-              <textarea id="address" name="address" rows="2" value="Complete office address"></textarea>
+              <textarea id="address" name="address" rows="2" placeholder="Complete office address"></textarea>
             </div>
           </div>
 
@@ -242,12 +241,12 @@
             
             <div class="form-group">
               <label for="website">Website</label>
-              <input type="url" id="website" name="website" value="https://organization.org">
+              <input type="url" id="website" name="website" placeholder="https://organization.org">
             </div>
 
             <div class="form-group">
               <label for="notes">Admin Notes</label>
-              <textarea id="notes" name="notes" rows="3" value="Internal notes about this organization..."></textarea>
+              <textarea id="notes" name="notes" rows="3" placeholder="Internal notes about this organization..."></textarea>
             </div>
           </div>
           </div>
