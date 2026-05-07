@@ -1,145 +1,30 @@
 
 
-// INITIAL DATA STRUCTURES
-let donations = [
-  {
-    id: 1,
-    donor: { name: "Juan dela Cruz", email: "juan@email.com" },
-    type: "monetary",
-    amount: 5000,
-    referenceNo: "DON-2024-001",
-    date: "2024-11-15",
-    status: "verified"
-  },
-  {
-    id: 2,
-    donor: { name: "Maria Santos", email: "maria@email.com" },
-    type: "in-kind",
-    item: "Rice Sacks",
-    quantity: 50,
-    referenceNo: "DON-2024-002",
-    date: "2024-11-16",
-    status: "pending"
-  },
-  {
-    id: 3,
-    donor: { name: "ABC Corporation", email: "contact@abc.com" },
-    type: "monetary",
-    amount: 25000,
-    referenceNo: "DON-2024-003",
-    date: "2024-11-17",
-    status: "verified"
-  }
-];
-
-let donors = [
-  {
-    id: 1,
-    name: "Juan dela Cruz",
-    type: "individual",
-    email: "juan@email.com",
-    phone: "09171234567",
-    status: "active",
-    donations: []
-  },
-  {
-    id: 2,
-    name: "Maria Santos",
-    type: "individual",
-    email: "maria@email.com",
-    phone: "09187654321",
-    status: "active",
-    donations: []
-  }
-];
-
-let distributions = [
-  {
-    id: 1,
-    location: "Barangay San Roque, Quezon City",
-    date: "2024-11-18",
-    type: "mixed",
-    beneficiaries: 150,
-    status: "ongoing",
-    monetaryAmount: 2000,
-    items: { rice: 50, water: 100 }
-  },
-  {
-    id: 2,
-    location: "Barangay Marikina Heights",
-    date: "2024-11-20",
-    type: "monetary",
-    beneficiaries: 200,
-    status: "pending",
-    monetaryAmount: 3000
-  }
-];
-
-let inKindItems = [
-  {
-    id: 1,
-    name: "Rice Sacks (25kg)",
-    category: "food",
-    quantity: 120,
-    unit: "sacks",
-    status: "stored",
-    donor: "ABC Corporation",
-    dateReceived: "2024-11-10"
-  },
-  {
-    id: 2,
-    name: "Bottled Water",
-    category: "water",
-    quantity: 500,
-    unit: "bottles",
-    status: "stored",
-    donor: "XYZ Foundation",
-    dateReceived: "2024-11-12"
-  }
-];
-
-let organizations = [
-  {
-    id: 1,
-    name: "ABC Corporation",
-    type: "private",
-    status: "active",
-    contactPerson: "John Smith",
-    email: "john@abc.com",
-    phone: "02-1234567",
-    contributions: [
-      { type: "monetary", amount: 50000, date: "2024-11-01" }
-    ]
-  }
-];
+// INITIAL DATA STRUCTURES — populated from API in syncDataWithModules()
+let donations = [];
+let donors = [];
+let distributions = [];
+let inKindItems = [];
+let organizations = [];
 
 // ==========================================
 // DASHBOARD STATISTICS
 // ==========================================
 
 function calculateDashboardStats() {
-  // Monetary donations total
   const totalMonetary = donations
     .filter(d => d.type === "monetary" && d.status === "verified")
     .reduce((sum, d) => sum + parseFloat(d.amount || 0), 0);
 
-  // In-kind donations count
-  const totalInKind = donations
-    .filter(d => d.type === "in-kind")
-    .length;
+  const totalInKind = donations.filter(d => d.type === "in-kind").length;
 
-  // Active donors count
-  const totalDonors = donors.filter(d => d.status === "active").length;
+  // Count unique donors by email
+  const uniqueDonors = new Set(donations.map(d => d.donor?.email || d.email).filter(Boolean));
+  const totalDonors = uniqueDonors.size;
 
-  // Total distributions
   const totalDistributions = distributions.length;
 
-  return {
-    totalMonetary,
-    totalInKind,
-    totalDonors,
-    totalDistributions
-  };
+  return { totalMonetary, totalInKind, totalDonors, totalDistributions };
 }
 
 function updateDashboardStats() {
