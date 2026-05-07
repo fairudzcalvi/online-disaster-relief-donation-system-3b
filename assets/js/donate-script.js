@@ -101,6 +101,12 @@ async function goToStep(stepNumber) {
             showToast('Please enter a valid email address');
             return;
         }
+
+        const phone = document.getElementById('phone').value.trim();
+        if (!phone) {
+            showToast('Phone number is required for GCash/GrabPay payments');
+            return;
+        }
         
         donorInfo = {
             firstName,
