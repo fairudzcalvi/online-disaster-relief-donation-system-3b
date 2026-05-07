@@ -6,12 +6,31 @@ const API_BASE = isLocal ? '../api/auth/' : '/api/auth/';
 
 document.addEventListener('DOMContentLoaded', () => {
     loadCampaigns();
+    loadOrganizationsDropdown();
     document.getElementById('newCampaignBtn').addEventListener('click', openNewModal);
     document.getElementById('campaignForm').addEventListener('submit', saveCampaign);
     document.getElementById('campaignModal').addEventListener('click', e => {
         if (e.target === document.getElementById('campaignModal')) closeModal();
     });
 });
+
+async function loadOrganizationsDropdown() {
+    try {
+        const res = await fetch(API_BASE + 'get_organizations.php', { headers });
+        const data = await res.json();
+        const select = document.getElementById('organization');
+        if (data.status === 'success') {
+            data.data.filter(o => o.status === 'active').forEach(o => {
+                const opt = document.createElement('option');
+                opt.value = o.name;
+                opt.textContent = o.name;
+                select.appendChild(opt);
+            });
+        }
+    } catch (e) {
+        console.error('Failed to load organizations:', e);
+    }
+}
 
 async function loadCampaigns() {
     const tbody = document.getElementById('campaignsTableBody');

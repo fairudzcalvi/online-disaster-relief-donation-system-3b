@@ -86,7 +86,9 @@
           <div class="form-row">
             <div class="form-group">
               <label>Organization <span class="required">*</span></label>
-              <input type="text" id="organization" name="organization" required placeholder="Partner organization name">
+              <select id="organization" name="organization" required>
+                <option value="">Select organization</option>
+              </select>
             </div>
             <div class="form-group">
               <label>Category <span class="required">*</span></label>
